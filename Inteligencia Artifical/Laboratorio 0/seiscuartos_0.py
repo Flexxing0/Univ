@@ -1,4 +1,5 @@
 import entornos_o
+import copy
 from random import choice
 
 estado = {
@@ -36,10 +37,11 @@ penalizaciones = {
 
 #Comenzamos con el robot en Piso 1, cuadro A
 class SeisCuartos(entornos_o.Entorno):
-    def __init__(self,x0=[estado['robot'],estado['PisoSuperior'],estado['PisoInferior']]):
-        
-        self.x = x0[:]
-        self.desempeño = 0
+    def __init__(self,x0=None):
+        if x0 is None:
+            x0 = [estado['robot'],estado['PisoSuperior'],estado['PisoInferior']]
+            self.x = copy.deepcopy(x0)
+            self.desempeño = 0
         
     def accion_legal(self,accion):
         print(f"Parado en {self.x[0][1]}")
@@ -60,6 +62,7 @@ class SeisCuartos(entornos_o.Entorno):
         #bajar solo en cuarto del centro del piso superior
     def transicion(self,accion):
         if not self.accion_legal(accion):
+            print(f"Accion ilegal, quiere moverse a: {accion}, se cambia a nada")
             accion = 'nada'
             #raise ValueError("La accion no es legal para este estado")
         
@@ -67,14 +70,16 @@ class SeisCuartos(entornos_o.Entorno):
         d = robot[1]
         self.desempeño -= penalizaciones[accion]
         if accion == "limpiar":
-            for i in range (1,2):
-                self.x[i][self.x[0][1]] = 'limpio'
+            for i in range (1,3):
+                if self.x[0][1] in self.x[i]:
+                    self.x[i][self.x[0][1]] = 'limpio'
         elif accion != "nada":
-            self.x[0][1] = movimientos[accion][d]
+            
             if accion == "subir":
                 self.x[0][0] = 'PisoSuperior'
             elif accion == "bajar":
                 self.x[0][0] = 'PisoInferior'
+            self.x[0][1] = movimientos[accion][d]
         print(f"Nueva transicion: {self.x[0][1]}")
            
     def percepcion(self):
@@ -105,20 +110,32 @@ class AgenteReactivoSeisCuartos(entornos_o.Agente):
             'limpiar' if situacion == 'sucio' else sigMovimiento
         )
         
-#class AgenteReactivoModeloSeisCuartos(entornos_o.Agente):
+class AgenteReactivoModeloSeisCuartos(entornos_o.Agente):
     
-#    def __init__(self):
+    def __init__(self):
         
-#    def programa(self,percepcion):
+        self.modelo = {
+            'robot': ['PisoSuperior','A'],
+            'PisoSuperior': {'A':'sucio','B':'sucio','C':'sucio'},
+            'PisoInferior': {'D':'sucio','E':'limpio','F':'sucio'}}
+        
+    def programa(self,percepcion):
+        robot, situacion = percepcion
+        keys = ['PisoSuperior','PisoInferior']
+        self.modelo['robot'] = robot
+        for i in range(1,3):
+            if self.modelo[0][1] in self.modelo[keys[i]]:
+                self.modelo[keys[i]][1] = situacion
+        for cuadro, estCuadro in self.modelo
         
 def test():
-    entornos_o.simulador(SeisCuartos(),AgenteAleatorio(list(movimientos)),10)
+    entornos_o.simulador(SeisCuartos(),AgenteAleatorio(list(movimientos)),20)
 
     print("Prueba del entorno con un agente reactivo")
-    entornos_o.simulador(SeisCuartos(), AgenteReactivoSeisCuartos(), 10)
+    entornos_o.simulador(SeisCuartos(), AgenteReactivoSeisCuartos(), 20)
 
-    #print("Prueba del entorno con un agente reactivo con modelo")
-    #entornos_o.simulador(SeisCuartos(), AgenteReactivoModeloSeisCuartos(), 10)
+    print("Prueba del entorno con un agente reactivo con modelo")
+    entornos_o.simulador(SeisCuartos(), AgenteReactivoModeloSeisCuartos(), 20)
     
 if __name__ == "__main__":
     test()

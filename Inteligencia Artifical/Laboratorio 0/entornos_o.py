@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import copy
 """
 entornos_o.py
 ------------
@@ -72,7 +73,7 @@ class Agente(object):
         pass
 
 
-def simulador(entorno, agente, pasos=10, verbose=True):
+def simulador(entorno, agente, pasos=20, verbose=True):
     """Realiza la simulación de un agente actuando en un entorno de forma genérica
 
     @param entorno: Un objeto de la clase Entorno
@@ -87,7 +88,7 @@ def simulador(entorno, agente, pasos=10, verbose=True):
 
     """
     historial_desempeño = [entorno.desempeño]
-    historial_estados = [entorno.x[:]]
+    historial_estados = [copy.deepcopy(entorno.x[:])]
     historial_acciones = []
 
     for paso in range(pasos):
@@ -97,7 +98,7 @@ def simulador(entorno, agente, pasos=10, verbose=True):
         entorno.transicion(a)
 
         historial_desempeño.append(entorno.desempeño)
-        historial_estados.append(entorno.x[:])
+        historial_estados.append(copy.deepcopy(entorno.x[:]))
         historial_acciones.append(a)
 
     historial_acciones.append(None)
