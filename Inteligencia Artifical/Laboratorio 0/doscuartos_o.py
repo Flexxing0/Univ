@@ -41,24 +41,24 @@ class DosCuartos(entornos_o.Entorno):
         self.desempeño = 0
         
 
-    def acción_legal(self, acción):
-        return acción in ("ir_A", "ir_B", "limpiar", "nada")
+    def accion_legal(self, accion):
+        return accion in ("ir_A", "ir_B", "limpiar", "nada")
 
-    def transición(self, acción):
-        if not self.acción_legal(acción):
-            raise ValueError("La acción no es legal para este estado")
+    def transición(self, accion):
+        if not self.accion_legal(accion):
+            raise ValueError("La accion no es legal para este estado")
 
         robot, a, b = self.x
-        if acción is not "nada" or a is "sucio" or b is "sucio":
+        if accion is not "nada" or a is "sucio" or b is "sucio":
             self.desempeño -= 1
-        if acción is "limpiar":
+        if accion is "limpiar":
             self.x[" AB".find(self.x[0])] = "limpio"
-        elif acción is "ir_A":
+        elif accion is "ir_A":
             self.x[0] = "A"
-        elif acción is "ir_B":
+        elif accion is "ir_B":
             self.x[0] = "B"
 
-    def percepción(self):
+    def percepcion(self):
         return self.x[0], self.x[" AB".find(self.x[0])]
 
 
@@ -79,9 +79,9 @@ class AgenteReactivoDoscuartos(entornos_o.Agente):
     Un agente reactivo simple
 
     """
-    def programa(self, percepción):
-        robot, situación = percepción
-        return ('limpiar' if situación == 'sucio' else
+    def programa(self, percepcion):
+        robot, situacion = percepcion
+        return ('limpiar' if situacion == 'sucio' else
                 'ir_A' if robot == 'B' else 'ir_B')
 
 
@@ -97,17 +97,17 @@ class AgenteReactivoModeloDosCuartos(entornos_o.Agente):
         """
         self.modelo = ['A', 'sucio', 'sucio']
 
-    def programa(self, percepción):
-        robot, situación = percepción
+    def programa(self, percepcion):
+        robot, situacion = percepcion
 
         # Actualiza el modelo interno
         self.modelo[0] = robot
-        self.modelo[' AB'.find(robot)] = situación
+        self.modelo[' AB'.find(robot)] = situacion
 
         # Decide sobre el modelo interno
         a, b = self.modelo[1], self.modelo[2]
         return ('nada' if a == b == 'limpio' else
-                'limpiar' if situación == 'sucio' else
+                'limpiar' if situacion == 'sucio' else
                 'ir_A' if robot == 'B' else 'ir_B')
 
 
