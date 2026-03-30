@@ -3,7 +3,7 @@ import copy
 from random import choice
 
 estado = {
-    'robot': ['PisoSuperior','A'],
+    'robot': ['PisoInferior','E'],
     'PisoSuperior': {'A':'sucio','B':'sucio','C':'sucio'},
     'PisoInferior': {'D':'sucio','E':'limpio','F':'sucio'}
 }
@@ -27,12 +27,12 @@ acciones = {
 }
 
 transiciones = {
-    "A": ['B'],
-    "B": ['A','C','D'],
-    "C": ['B'],
-    "D": ['E','A'],
-    "E": ['D','F'],
-    "F": ['E','C']
+    "A": {'B':'derecha'},
+    "B": {'A':'izquierda','C':'derecha','D':'bajar'},
+    "C": {'B':'izquierda'},
+    "D": {'E':'derecha','A':'subir'},
+    "E": {'D':'izquierda','F':'derecha'},
+    "F": {'E':'izquierda','C':'subir'}
 }
 
 penalizaciones = {
@@ -144,19 +144,17 @@ class AgenteReactivoModeloSeisCuartos(entornos_o.Agente):
                 self.modelo[e][cuadro] = situacion
                 break
         #Verifica si hay suciedad
-        cuadroSucio = None
-        for e in range(len(keys)):
-            piso = self.modelo[e]
-            for key, estado in piso.items():
-                if estado == 'sucio':
-                    
-            if  == 'sucio':
-                haySuciedad = True
+        if situacion != 'sucio':
+            cuadroSucio = None
+            for e in range(len(keys)):
+                piso = self.modelo[e]
+                for key, estado in piso.items():
+                    if estado == 'sucio':
+                        cuadroSucio = key
+                        break
                 break
-            else:
-                haySuciedad = False
-                break
-        if haySuciedad:
+            if 
+            
             
         else:
             return "nada"
@@ -168,8 +166,8 @@ def test():
     print("Prueba del entorno con un agente reactivo")
     entornos_o.simulador(SeisCuartos(), AgenteReactivoSeisCuartos(), 20)
 
-    print("Prueba del entorno con un agente reactivo con modelo")
-    entornos_o.simulador(SeisCuartos(), AgenteReactivoModeloSeisCuartos(), 20)
+    #print("Prueba del entorno con un agente reactivo con modelo")
+    #entornos_o.simulador(SeisCuartos(), AgenteReactivoModeloSeisCuartos(), 20)
     
 if __name__ == "__main__":
     test()
