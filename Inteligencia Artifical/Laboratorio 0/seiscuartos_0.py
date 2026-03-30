@@ -17,7 +17,7 @@ estados = {
     'F': ['subir','izquierda']
 }
 
-movimientos = {
+acciones = {
     "derecha": {'A':'B', 'B':'C', 'D':'E', 'E':'F'},
     "izquierda": {'B':'A', 'C':'B', 'E':'D', 'F':'E'},
     "subir": {'D':'A', 'F':'C'},
@@ -26,13 +26,22 @@ movimientos = {
     "limpiar": None,
 }
 
+transiciones = {
+    "A": ['B'],
+    "B": ['A','C','D'],
+    "C": ['B'],
+    "D": ['E','A'],
+    "E": ['D','F'],
+    "F": ['E','C']
+}
+
 penalizaciones = {
     'subir':3,
     'bajar':3,
     'derecha':2,
     'izquierda':2,
     'limpiar':1,
-    'nada':2
+    'nada':0
 }
 
 #Comenzamos con el robot en Piso 1, cuadro A
@@ -79,7 +88,7 @@ class SeisCuartos(entornos_o.Entorno):
                 self.x[0][0] = 'PisoSuperior'
             elif accion == "bajar":
                 self.x[0][0] = 'PisoInferior'
-            self.x[0][1] = movimientos[accion][d]
+            self.x[0][1] = acciones[accion][d]
         print(f"Nueva transicion: {self.x[0][1]}")
            
     def percepcion(self):
@@ -121,15 +130,40 @@ class AgenteReactivoModeloSeisCuartos(entornos_o.Agente):
         
     def programa(self,percepcion):
         robot, situacion = percepcion
-        keys = ['PisoSuperior','PisoInferior']
+        keys = ['PisoSuperior','PisoInferior']#se puede cambiar a uno mas generico, como modelo.keys
         self.modelo['robot'] = robot
-        for i in range(1,3):
-            if self.modelo[0][1] in self.modelo[keys[i]]:
-                self.modelo[keys[i]][1] = situacion
-        for cuadro, estCuadro in self.modelo
+        piso = None
+        cuadro = None
+        cuadros = []
+        #Actualizacion estado interno
+        for e in range(len(keys)):
+            cuadro = self.modelo['robot'][1]
+            piso = self.modelo[e]
+            cuadros.append(list(piso))
+            if cuadro in piso:
+                self.modelo[e][cuadro] = situacion
+                break
+        #Verifica si hay suciedad
+        cuadroSucio = None
+        for e in range(len(keys)):
+            piso = self.modelo[e]
+            for key, estado in piso.items():
+                if estado == 'sucio':
+                    
+            if  == 'sucio':
+                haySuciedad = True
+                break
+            else:
+                haySuciedad = False
+                break
+        if haySuciedad:
+            
+        else:
+            return "nada"
+            
         
 def test():
-    entornos_o.simulador(SeisCuartos(),AgenteAleatorio(list(movimientos)),20)
+    entornos_o.simulador(SeisCuartos(),AgenteAleatorio(list(acciones)),20)
 
     print("Prueba del entorno con un agente reactivo")
     entornos_o.simulador(SeisCuartos(), AgenteReactivoSeisCuartos(), 20)
