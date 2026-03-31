@@ -3,9 +3,9 @@ import copy
 from random import choice
 
 estado = {
-    'robot': ['PisoInferior','E'],
-    'PisoSuperior': {'A':'sucio','B':'sucio','C':'sucio'},
-    'PisoInferior': {'D':'sucio','E':'limpio','F':'sucio'}
+    'robot': ['PisoSuperior','A'],
+    'PisoSuperior': {'A':'limpio','B':'limpio','C':'limpio'},
+    'PisoInferior': {'D':'limpio','E':'limpio','F':'sucio'}
 }
 
 estados = {
@@ -124,50 +124,67 @@ class AgenteReactivoModeloSeisCuartos(entornos_o.Agente):
     def __init__(self):
         
         self.modelo = {
-            'robot': ['PisoSuperior','A'],
-            'PisoSuperior': {'A':'sucio','B':'sucio','C':'sucio'},
-            'PisoInferior': {'D':'sucio','E':'limpio','F':'sucio'}}
+    'robot': ['PisoSuperior','A'],
+    'PisoSuperior': {'A':'sucio','B':'sucio','C':'sucio'},
+    'PisoInferior': {'D':'sucio','E':'sucio','F':'sucio'}
+}#Como este modelo mira el pasado, no predice el futuro, entonces toma el peor caso posible, despues segun la percepcion, va cambiando, por eso en la linea de comandos explora todo porque se basa en modelo interno, pero al detectar la realidad, no limpia si esta limpio, en cambio, se mueve
         
     def programa(self,percepcion):
         robot, situacion = percepcion
-        keys = ['PisoSuperior','PisoInferior']#se puede cambiar a uno mas generico, como modelo.keys
-        self.modelo['robot'] = robot
-        piso = None
-        cuadro = None
-        cuadros = []
-        #Actualizacion estado interno
-        for e in range(len(keys)):
-            cuadro = self.modelo['robot'][1]
-            piso = self.modelo[e]
-            cuadros.append(list(piso))
-            if cuadro in piso:
-                self.modelo[e][cuadro] = situacion
-                break
-        #Verifica si hay suciedad
-        if situacion != 'sucio':
-            cuadroSucio = None
-            for e in range(len(keys)):
-                piso = self.modelo[e]
-                for key, estado in piso.items():
-                    if estado == 'sucio':
-                        cuadroSucio = key
-                        break
-                break
-            if 
-            
-            
+        llaves = list(self.modelo.keys())
+        llaves.remove('robot')
+        pisos = []
+        suciedadPiso = {}
+        pisoActual, cuadroActual = robot
+        #actualiza estado interno
+        self.modelo['robot'] = [pisoActual, cuadroActual]
+        self.modelo[pisoActual][cuadroActual] = situacion
+        #busca los pisos que estan sucios
+        for i in range(len(llaves)):
+            suciedadPiso[llaves[i]] = any(v=='sucio' for v in self.modelo[llaves[i]].values())   
+        #decide el sigMovimiento
+        sigMovimiento = None
+        if self.modelo[pisoActual][cuadroActual] == 'sucio':
+            sigMovimiento = 'limpiar'
         else:
-            return "nada"
+            llaves.remove(pisoActual)
+            valores = list(self.modelo[pisoActual].values())
+            indice = list(self.modelo[pisoActual].keys()).index(cuadroActual)
+            izquierda = valores[:indice]
+            derecha = valores[indice+1:]
+            if any(v == 'sucio' for v in izquierda):
+                print("Mi izquierda esta sucia")
+                sigMovimiento = 'izquierda'
+            elif any((v == 'sucio' for v in derecha)):
+                print("Mi derecha esta sucia")
+                sigMovimiento = 'derecha'
+            elif suciedadPiso[llaves[0]]:
+                print("Mi piso esta limpio, me fijo el de abajo/arriba")
+                if 'subir' in estados[cuadroActual]:
+                    sigMovimiento = 'subir'
+                    print("Puedo subir, subo")
+                elif 'bajar' in estados[cuadroActual]:
+                    sigMovimiento = 'bajar'
+                    print("Puedo bajar, bajo")
+                elif 'derecha' in estados[cuadroActual]:
+                    sigMovimiento = 'derecha'
+                    print("Piso arriba/abajo 2 sucio, intentare algo")
+                elif 'izquierda' in estados[cuadroActual]:
+                    sigMovimiento = 'izquierda'
+                    print("Piso 1 arriba/abajo sucio, intentare algo")
+            else:
+                sigMovimiento = 'nada'
+        return sigMovimiento
             
         
 def test():
-    entornos_o.simulador(SeisCuartos(),AgenteAleatorio(list(acciones)),20)
+    #entornos_o.simulador(SeisCuartos(),AgenteAleatorio(list(acciones)),20)
 
-    print("Prueba del entorno con un agente reactivo")
-    entornos_o.simulador(SeisCuartos(), AgenteReactivoSeisCuartos(), 20)
+    #print("Prueba del entorno con un agente reactivo")
+    #entornos_o.simulador(SeisCuartos(), AgenteReactivoSeisCuartos(), 20)
 
-    #print("Prueba del entorno con un agente reactivo con modelo")
-    #entornos_o.simulador(SeisCuartos(), AgenteReactivoModeloSeisCuartos(), 20)
+    print("Prueba del entorno con un agente reactivo con modelo")
+    entornos_o.simulador(SeisCuartos(), AgenteReactivoModeloSeisCuartos(), 20)
     
 if __name__ == "__main__":
     test()
