@@ -26,15 +26,6 @@ acciones = {
     "limpiar": None,
 }
 
-transiciones = {
-    "A": {'B':'derecha'},
-    "B": {'A':'izquierda','C':'derecha','D':'bajar'},
-    "C": {'B':'izquierda'},
-    "D": {'E':'derecha','A':'subir'},
-    "E": {'D':'izquierda','F':'derecha'},
-    "F": {'E':'izquierda','C':'subir'}
-}
-
 penalizaciones = {
     'subir':3,
     'bajar':3,
@@ -133,7 +124,6 @@ class AgenteReactivoModeloSeisCuartos(entornos_o.Agente):
         robot, situacion = percepcion
         llaves = list(self.modelo.keys())
         llaves.remove('robot')
-        pisos = []
         suciedadPiso = {}
         pisoActual, cuadroActual = robot
         #actualiza estado interno
