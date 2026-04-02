@@ -107,7 +107,9 @@ def simulador(entorno, agente, pasos=20, verbose=True):
         print(u"\n\nSimulación de entorno tipo " +
               str(type(entorno)) +
               " con el agente tipo " +
-              str(type(agente)) + "\n")
+              str(type(agente)) +
+              str(f"Estado inicial: \n Robot: {historial_estados[0][0][0],historial_estados[0][0][1]}\n") +
+              str(f"Piso Superior: {historial_estados[0][1]} \nPiso Inferior: {historial_estados[0][2]}"))
 
         print('Paso'.center(10) +
               'Estado'.center(40) +
@@ -117,10 +119,15 @@ def simulador(entorno, agente, pasos=20, verbose=True):
         print('_' * (10 + 40 + 25 + 15))
 
         for i in range(pasos):
+            piso_superior = ' '.join(f"{c}:{s}" for c,s in historial_estados[i][1].items())
+            piso_inferior = ' '.join(f"{c}:{s}" for c,s in historial_estados[i][2].items())
             print(str(i).center(10) +
-                  str(historial_estados[i]).center(40) +
+                  str(f"{historial_estados[i][0][0]}:{historial_estados[i][0][1]} ").center(40) +
                   str(historial_acciones[i]).center(25) +
-                  str(historial_desempeño[i]).rjust(12))
+                  str(historial_desempeño[i]).rjust(12) + "\n" +
+                  str(piso_superior).center(70)+"\n"+
+                  str(piso_inferior).center(70))
+            print('_' * (10 + 40 + 25 + 15))
 
         print('_' * (10 + 40 + 25 + 15) + '\n\n')
 
