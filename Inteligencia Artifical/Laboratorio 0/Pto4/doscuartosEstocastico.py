@@ -1,34 +1,6 @@
 import entornos_o
 import random
 
-#para saber donde se puede mover
-movimientos = {
-    'A': ['derecha'],
-    'B': ['bajar','izquierda','derecha'],
-    'C': ['izquierda'],
-    'D': ['subir','derecha'],
-    'E': ['derecha','izquierda'],
-    'F': ['subir','izquierda']
-}
-#las acciones y donde transiciona cada cuadro
-acciones = {
-    "derecha": {'A':'B', 'B':'C', 'D':'E', 'E':'F'},
-    "izquierda": {'B':'A', 'C':'B', 'E':'D', 'F':'E'},
-    "subir": {'D':'A', 'F':'C'},
-    "bajar": {'B':'E'},
-    "nada": None,
-    "limpiar": None,
-}
-
-penalizaciones = {
-    'subir':3,
-    'bajar':3,
-    'derecha':2,
-    'izquierda':2,
-    'limpiar':1,
-    'nada':0
-}
-
 class DosCuartosEstocastico(entornos_o.Entorno):
 
     def __init__(self, x0=["A", "sucio", "sucio"]):
