@@ -3,7 +3,7 @@ import copy
 from random import choice
 
 estado = {
-    'robot': ['PisoSuperior','A'],
+    'robot': ['PisoInferior','E'],
     'PisoSuperior': {'A':'limpio','B':'limpio','C':'limpio'},
     'PisoInferior': {'D':'limpio','E':'limpio','F':'sucio'}
 }
@@ -35,7 +35,7 @@ penalizaciones = {
     'nada':0
 }
 
-#Comenzamos con el robot en Piso 1, cuadro A
+#Comenzamos con el robot en PisoSuperior, cuadro A, tambien funciona cambiando de piso y cuadro
 class SeisCuartos(entornos_o.Entorno):
     def __init__(self,x0=None):
         if x0 is None:
@@ -58,8 +58,7 @@ class SeisCuartos(entornos_o.Entorno):
                 return accion in ("izquierda","derecha","limpiar","nada")
             case 'F':
                 return accion in ("izquierda","subir","limpiar","nada")
-        #subir solo en los extremos del piso inferior
-        #bajar solo en cuarto del centro del piso superior
+
     def transicion(self,accion):
         if not self.accion_legal(accion):
             print(f"Accion ilegal, quiere moverse a: {accion}, se cambia a nada")
@@ -89,8 +88,6 @@ class SeisCuartos(entornos_o.Entorno):
                 situacion = self.x[i][self.x[0][1]]
         print(f"Percepcion actual: {self.x[0],situacion}")
         return self.x[0], situacion
-        #medio raro pero busca en piso superior e inferior la situacion de A
-        #puedo usar [0][0] para primera tupla y case para ver el piso, y luego hacer [0].find [0][2] por ejemplo, o usar directamente diccionario para cambiar valores. 
     
 class AgenteAleatorio(entornos_o.Agente):
     
