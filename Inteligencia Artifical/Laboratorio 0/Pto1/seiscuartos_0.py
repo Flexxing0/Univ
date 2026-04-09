@@ -4,8 +4,8 @@ from random import choice
 
 estado = {
     'robot': ['PisoInferior','E'],
-    'PisoSuperior': {'A':'limpio','B':'limpio','C':'limpio'},
-    'PisoInferior': {'D':'limpio','E':'limpio','F':'sucio'}
+    'PisoSuperior': {'A':'sucio','B':'limpio','C':'sucio'},
+    'PisoInferior': {'D':'sucio','E':'limpio','F':'sucio'}
 }
 
 estados = {
@@ -62,7 +62,8 @@ class SeisCuartos(entornos_o.Entorno):
     def transicion(self,accion):
         if not self.accion_legal(accion):
             print(f"Accion ilegal, quiere moverse a: {accion}, se cambia a nada")
-            accion = 'nada'
+            self.desempeño -= penalizaciones[accion]  
+            accion = 'nada' 
             #raise ValueError("La accion no es legal para este estado")
         
         robot,piso1,piso2 = self.x
@@ -100,23 +101,20 @@ class AgenteReactivoSeisCuartos(entornos_o.Agente):
     
     def programa(self,percepcion):
         robot, situacion = percepcion
-        sigMovimiento = choice(estados[robot[1]])
         
         print(f"Situacion: {situacion}")
         return (
-            'limpiar' if situacion == 'sucio' else sigMovimiento
+            'limpiar' if situacion == 'sucio' else choice(estados[robot[1]])
         )
         
 class AgenteReactivoModeloSeisCuartos(entornos_o.Agente):
     
-    def __init__(self):
-        
+    def __init__(self): 
         self.modelo = {
     'robot': ['PisoSuperior','A'],
     'PisoSuperior': {'A':'sucio','B':'sucio','C':'sucio'},
     'PisoInferior': {'D':'sucio','E':'sucio','F':'sucio'}
-}#Como este modelo mira el pasado, no predice el futuro, entonces toma el peor caso posible, despues segun la percepcion, va cambiando, por eso en la linea de comandos explora todo porque se basa en modelo interno, pero al detectar la realidad, no limpia si esta limpio, en cambio, se mueve
-        
+}    
     def programa(self,percepcion):
         robot, situacion = percepcion
         llaves = list(self.modelo.keys())
@@ -165,13 +163,14 @@ class AgenteReactivoModeloSeisCuartos(entornos_o.Agente):
             
         
 def test():
-    #entornos_o.simulador(SeisCuartos(),AgenteAleatorio(list(acciones)),20)
+    print("Prueba del entorno con un agente aleatorio")
+    entornos_o.simulador(SeisCuartos(),AgenteAleatorio(list(acciones)),100)
 
     #print("Prueba del entorno con un agente reactivo")
     #entornos_o.simulador(SeisCuartos(), AgenteReactivoSeisCuartos(), 20)
 
-    print("Prueba del entorno con un agente reactivo con modelo")
-    entornos_o.simulador(SeisCuartos(), AgenteReactivoModeloSeisCuartos(), 20)
+    #print("Prueba del entorno con un agente reactivo con modelo")
+    #entornos_o.simulador(SeisCuartos(), AgenteReactivoModeloSeisCuartos(), 100)
     
 if __name__ == "__main__":
     test()
