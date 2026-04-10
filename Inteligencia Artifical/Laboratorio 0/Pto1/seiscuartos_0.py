@@ -163,14 +163,14 @@ class AgenteReactivoModeloSeisCuartos(entornos_o.Agente):
             
         
 def test():
-    print("Prueba del entorno con un agente aleatorio")
-    entornos_o.simulador(SeisCuartos(),AgenteAleatorio(list(acciones)),100)
+    #print("Prueba del entorno con un agente aleatorio")
+    #entornos_o.simulador(SeisCuartos(),AgenteAleatorio(list(acciones)),100)
 
     #print("Prueba del entorno con un agente reactivo")
     #entornos_o.simulador(SeisCuartos(), AgenteReactivoSeisCuartos(), 20)
 
-    #print("Prueba del entorno con un agente reactivo con modelo")
-    #entornos_o.simulador(SeisCuartos(), AgenteReactivoModeloSeisCuartos(), 100)
+    print("Prueba del entorno con un agente reactivo con modelo")
+    entornos_o.simulador(SeisCuartos(), AgenteReactivoModeloSeisCuartos(), 100)
     
 if __name__ == "__main__":
     test()

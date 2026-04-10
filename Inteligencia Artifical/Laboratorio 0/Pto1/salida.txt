@@ -1,0 +1,409 @@
+Simulaci�n de entorno tipo <class '__main__.SeisCuartos'> con el agente tipo <class '__main__.AgenteAleatorio'>Estado inicial: 
+ Robot: ('PisoInferior', 'E')
+Piso Superior: {'A': 'sucio', 'B': 'limpio', 'C': 'sucio'} 
+Piso Inferior: {'D': 'sucio', 'E': 'limpio', 'F': 'sucio'}
+   Paso                    Estado                           accion            Desempe�o   
+__________________________________________________________________________________________
+    0                 PisoInferior:E                       derecha                    0
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    1                 PisoInferior:F                        subir                    -2
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    2                 PisoSuperior:C                      izquierda                  -5
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    3                 PisoSuperior:B                      izquierda                  -7
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    4                 PisoSuperior:A                        subir                    -9
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    5                 PisoSuperior:A                        subir                   -12
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    6                 PisoSuperior:A                       derecha                  -15
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    7                 PisoSuperior:B                        subir                   -17
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    8                 PisoSuperior:B                       derecha                  -20
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    9                 PisoSuperior:C                        subir                   -22
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    10                PisoSuperior:C                       derecha                  -25
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    11                PisoSuperior:C                        bajar                   -27
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    12                PisoSuperior:C                       limpiar                  -30
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    13                PisoSuperior:C                         nada                   -31
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    14                PisoSuperior:C                      izquierda                 -31
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    15                PisoSuperior:B                         nada                   -33
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    16                PisoSuperior:B                      izquierda                 -33
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    17                PisoSuperior:A                        bajar                   -35
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    18                PisoSuperior:A                        bajar                   -38
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    19                PisoSuperior:A                        subir                   -41
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    20                PisoSuperior:A                        bajar                   -44
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    21                PisoSuperior:A                         nada                   -47
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    22                PisoSuperior:A                         nada                   -47
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    23                PisoSuperior:A                      izquierda                 -47
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    24                PisoSuperior:A                         nada                   -49
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    25                PisoSuperior:A                        subir                   -49
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    26                PisoSuperior:A                       limpiar                  -52
+                      A:sucio B:limpio C:limpio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    27                PisoSuperior:A                       derecha                  -53
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    28                PisoSuperior:B                        bajar                   -55
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    29                PisoInferior:E                        subir                   -58
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    30                PisoInferior:E                      izquierda                 -61
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    31                PisoInferior:D                      izquierda                 -63
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    32                PisoInferior:D                        subir                   -65
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    33                PisoSuperior:A                      izquierda                 -68
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    34                PisoSuperior:A                        bajar                   -70
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    35                PisoSuperior:A                        bajar                   -73
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    36                PisoSuperior:A                      izquierda                 -76
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    37                PisoSuperior:A                         nada                   -78
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    38                PisoSuperior:A                         nada                   -78
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    39                PisoSuperior:A                        bajar                   -78
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    40                PisoSuperior:A                       derecha                  -81
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    41                PisoSuperior:B                        bajar                   -83
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    42                PisoInferior:E                       limpiar                  -86
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    43                PisoInferior:E                        bajar                   -87
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    44                PisoInferior:E                       limpiar                  -90
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    45                PisoInferior:E                        bajar                   -91
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    46                PisoInferior:E                        subir                   -94
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    47                PisoInferior:E                      izquierda                 -97
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    48                PisoInferior:D                         nada                   -99
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    49                PisoInferior:D                      izquierda                 -99
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    50                PisoInferior:D                        bajar                  -101
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    51                PisoInferior:D                       limpiar                 -104
+                      A:limpio B:limpio C:limpio                      
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    52                PisoInferior:D                       limpiar                 -105
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    53                PisoInferior:D                        subir                  -106
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    54                PisoSuperior:A                       derecha                 -109
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    55                PisoSuperior:B                      izquierda                -111
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    56                PisoSuperior:A                        subir                  -113
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    57                PisoSuperior:A                        subir                  -116
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    58                PisoSuperior:A                        bajar                  -119
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    59                PisoSuperior:A                       derecha                 -122
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    60                PisoSuperior:B                      izquierda                -124
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    61                PisoSuperior:A                       derecha                 -126
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    62                PisoSuperior:B                       limpiar                 -128
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    63                PisoSuperior:B                      izquierda                -129
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    64                PisoSuperior:A                       limpiar                 -131
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    65                PisoSuperior:A                         nada                  -132
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    66                PisoSuperior:A                       limpiar                 -132
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    67                PisoSuperior:A                        subir                  -133
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    68                PisoSuperior:A                       limpiar                 -136
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    69                PisoSuperior:A                        subir                  -137
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    70                PisoSuperior:A                       limpiar                 -140
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    71                PisoSuperior:A                        bajar                  -141
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    72                PisoSuperior:A                         nada                  -144
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    73                PisoSuperior:A                      izquierda                -144
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    74                PisoSuperior:A                        subir                  -146
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    75                PisoSuperior:A                      izquierda                -149
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    76                PisoSuperior:A                        subir                  -151
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    77                PisoSuperior:A                         nada                  -154
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    78                PisoSuperior:A                       limpiar                 -154
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    79                PisoSuperior:A                       derecha                 -155
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    80                PisoSuperior:B                        subir                  -157
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    81                PisoSuperior:B                       limpiar                 -160
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    82                PisoSuperior:B                        bajar                  -161
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    83                PisoInferior:E                       derecha                 -164
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    84                PisoInferior:F                       derecha                 -166
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    85                PisoInferior:F                       derecha                 -168
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    86                PisoInferior:F                         nada                  -170
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    87                PisoInferior:F                         nada                  -170
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    88                PisoInferior:F                        bajar                  -170
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    89                PisoInferior:F                        bajar                  -173
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    90                PisoInferior:F                       derecha                 -176
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    91                PisoInferior:F                        subir                  -178
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    92                PisoSuperior:C                        subir                  -181
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    93                PisoSuperior:C                       limpiar                 -184
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    94                PisoSuperior:C                        bajar                  -185
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    95                PisoSuperior:C                         nada                  -188
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    96                PisoSuperior:C                        bajar                  -188
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    97                PisoSuperior:C                       limpiar                 -191
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    98                PisoSuperior:C                        bajar                  -192
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    99                PisoSuperior:C                       limpiar                 -195
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+__________________________________________________________________________________________
+
+

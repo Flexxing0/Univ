@@ -1,0 +1,409 @@
+Simulaci�n de entorno tipo <class '__main__.SeisCuartos'> con el agente tipo <class '__main__.AgenteReactivoModeloSeisCuartos'>Estado inicial: 
+ Robot: ('PisoInferior', 'E')
+Piso Superior: {'A': 'sucio', 'B': 'limpio', 'C': 'sucio'} 
+Piso Inferior: {'D': 'sucio', 'E': 'limpio', 'F': 'sucio'}
+   Paso                    Estado                           accion            Desempe�o   
+__________________________________________________________________________________________
+    0                 PisoInferior:E                      izquierda                   0
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    1                 PisoInferior:D                       limpiar                   -2
+                       A:sucio B:limpio C:sucio                       
+                       D:sucio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    2                 PisoInferior:D                       derecha                   -3
+                       A:sucio B:limpio C:sucio                       
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    3                 PisoInferior:E                       derecha                   -5
+                       A:sucio B:limpio C:sucio                       
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    4                 PisoInferior:F                       limpiar                   -7
+                       A:sucio B:limpio C:sucio                       
+                      D:limpio E:limpio F:sucio                       
+__________________________________________________________________________________________
+    5                 PisoInferior:F                        subir                    -8
+                       A:sucio B:limpio C:sucio                       
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    6                 PisoSuperior:C                       limpiar                  -11
+                       A:sucio B:limpio C:sucio                       
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    7                 PisoSuperior:C                      izquierda                 -12
+                      A:sucio B:limpio C:limpio                       
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    8                 PisoSuperior:B                      izquierda                 -14
+                      A:sucio B:limpio C:limpio                       
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    9                 PisoSuperior:A                       limpiar                  -16
+                      A:sucio B:limpio C:limpio                       
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    10                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    11                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    12                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    13                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    14                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    15                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    16                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    17                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    18                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    19                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    20                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    21                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    22                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    23                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    24                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    25                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    26                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    27                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    28                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    29                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    30                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    31                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    32                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    33                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    34                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    35                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    36                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    37                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    38                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    39                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    40                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    41                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    42                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    43                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    44                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    45                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    46                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    47                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    48                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    49                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    50                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    51                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    52                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    53                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    54                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    55                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    56                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    57                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    58                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    59                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    60                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    61                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    62                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    63                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    64                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    65                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    66                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    67                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    68                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    69                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    70                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    71                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    72                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    73                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    74                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    75                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    76                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    77                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    78                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    79                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    80                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    81                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    82                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    83                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    84                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    85                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    86                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    87                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    88                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    89                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    90                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    91                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    92                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    93                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    94                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    95                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    96                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    97                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    98                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+    99                PisoSuperior:A                         nada                   -17
+                      A:limpio B:limpio C:limpio                      
+                      D:limpio E:limpio F:limpio                      
+__________________________________________________________________________________________
+__________________________________________________________________________________________
+
+
