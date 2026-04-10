@@ -10,10 +10,12 @@ datoframe2 = pd.DataFrame(dato2)
 #Se combina ambos dataframe anteriores y imprime la tabla resultante
 frames = [datoframe,datoframe2]
 concatFrame = pd.concat(frames, ignore_index=True, sort=False)#, keys=['suc1','suc2'])
-print(concatFrame)
+#print(concatFrame)
 #Tratamiento de datos, cambio de formato de fecha
-nuevoFormato = pd.to_datetime(concatFrame['Fecha'],format="%m/%d/%Y")
+nuevoFormato = pd.to_datetime(concatFrame['Fecha'])
 ##print(nuevoFormato)
-# sortFrame = concatFrame.groupby("Producto").agg(Cantidad=pd.NamedAgg(column="Cantidad",aggfunc="sum")).sort_values("Cantidad",ascending=False)
+#productoMasVendido = concatFrame.groupby("Producto").agg(Cantidad=pd.NamedAgg(column="Cantidad",aggfunc="sum")).sort_values("Cantidad",ascending=False)
+meses = concatFrame['Fecha'].dt.month
+agrupadoFechas = concatFrame.groupby('Fecha')
+print(agrupadoFechas.get_group(meses))
 
-print(sortFrame)
