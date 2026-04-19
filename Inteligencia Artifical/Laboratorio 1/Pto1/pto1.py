@@ -17,7 +17,7 @@ frameFormatoNuevo['Fecha'] = pd.to_datetime(concatFrame['Fecha'])
 print(frameFormatoNuevo)
 #Para producto mas vendido
 productos = concatFrame.groupby("Producto")
-productoMasVendido = productos.agg(Cantidad=pd.NamedAgg(column="Cantidad",aggfunc="sum")).sort_values("Cantidad",ascending=False)
+productoMasVendido = productos.agg(CantidadVendida=pd.NamedAgg(column="Cantidad",aggfunc="sum")).sort_values("CantidadVendida",ascending=False)
 print(productoMasVendido)
 #Para ventas por mes
 meses = frameFormatoNuevo['Fecha'].dt.month
