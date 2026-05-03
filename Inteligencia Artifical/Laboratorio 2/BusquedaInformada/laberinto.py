@@ -1,4 +1,3 @@
-from collections import deque
 import heapq
 import math
 
@@ -169,13 +168,13 @@ class Laberinto:
         Laberinto.print_path(maze, a_m, "A* Manhattan")
         Laberinto.print_path(maze, a_e, "A* Euclidiana")
 
-        print("\n=== Nodos expandidos y longitud de camino ===")
+        print("\n=== PUNTO 4: Nodos expandidos ===")
         print(f"  Greedy Manhattan : {g_m_exp:3} nodos | longitud: {len(g_m)}")
         print(f"  Greedy Euclidiana: {g_e_exp:3} nodos | longitud: {len(g_e)}")
         print(f"  A* Manhattan     : {a_m_exp:3} nodos | longitud: {len(a_m)} | costo: {a_m_c}")
         print(f"  A* Euclidiana    : {a_e_exp:3} nodos | longitud: {len(a_e)} | costo: {a_e_c}")
 
-        print("\n=== Complejidad ===")
+        print("\n=== PUNTO 5: Complejidad ===")
         print("  Greedy — Tiempo: O(b^m) | Espacio: O(b^m)")
         print("           No óptimo, no completo (puede ciclarse sin visited).")
         print("  A*     — Tiempo: O(b^d) | Espacio: O(b^d)")
