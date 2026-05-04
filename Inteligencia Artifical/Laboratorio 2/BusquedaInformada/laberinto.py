@@ -26,7 +26,7 @@ class Laberinto:
         return start, goal
 
     def __get_vecinos(maze, r, c):
-        """Devuelve celdas adyacentes válidas (sin obstáculos, dentro del grid)."""
+        
         directions = [(-1,0),(1,0),(0,-1),(0,1)]  # arriba, abajo, izq, der
         result = []
         for dr, dc in directions:
@@ -35,11 +35,7 @@ class Laberinto:
                 result.append((nr, nc))
         return result
     def print_path(maze, path, name):
-        """
-        Imprime el laberinto con el camino marcado con '*'.
-        El inicio y fin conservan sus letras (S, G).
-        Permite visualizar visualmente el recorrido de cada algoritmo.
-        """
+
         grid = [row[:] for row in maze]  # copia para no modificar el original
         for (r, c) in path:
             if grid[r][c] not in ('S', 'G'):
@@ -49,11 +45,7 @@ class Laberinto:
             print(' '.join(row))
 
     def print_path(maze, path, name):
-        """
-        Imprime el laberinto con el camino marcado con '*'.
-        El inicio y fin conservan sus letras (S, G).
-        Permite visualizar visualmente el recorrido de cada algoritmo.
-        """
+
         grid = [row[:] for row in maze]  # copia para no modificar el original
         for (r, c) in path:
             if grid[r][c] not in ('S', 'G'):
@@ -64,40 +56,16 @@ class Laberinto:
     # ── Heurísticas ──────────────────────────────────────────────────────────────
 
     def h_manhattan(node, goal):
-        """
-        Distancia Manhattan: suma de diferencias absolutas en filas y columnas.
-        |fila_actual - fila_goal| + |col_actual - col_goal|
-
-        Es admisible en una grilla con movimientos en 4 direcciones porque
-        nunca sobreestima — el camino real siempre requiere al menos esa
-        cantidad de pasos. No cuenta obstáculos, así que puede ser optimista.
-        """
         return abs(node[0] - goal[0]) + abs(node[1] - goal[1])
 
     def h_euclidiana(node, goal):
-        """
-        Distancia Euclidiana: distancia en línea recta al objetivo.
-        sqrt((fila_actual - fila_goal)^2 + (col_actual - col_goal)^2)
-
-        También es admisible: la línea recta siempre es menor o igual
-        al camino real. Además, h_manhattan >= h_euclidiana siempre,
-        por lo que Manhattan DOMINA a Euclidiana (es mejor heurística).
-        """
+    
         return math.sqrt((node[0] - goal[0])**2 + (node[1] - goal[1])**2)
 
     # ── Greedy Best-First Search ──────────────────────────────────────────────────
 
     def greedy(maze, h):
-        """
-        Búsqueda Primero el Mejor Voraz (Greedy Best-First Search).
 
-        Expande siempre el nodo con menor h(n) — la estimación al objetivo.
-        NO considera el costo g(n) del camino ya recorrido.
-        Esto lo hace rápido pero NO garantiza el camino óptimo.
-
-        heap: (h(n), nodo, camino)
-        heapq ordena por el primer elemento → siempre expande el de menor h.
-        """
         start, goal = Laberinto.__get_inicio_fin(maze)
         heap = [(h(start, goal), start, [start])]
         visited = set()
@@ -119,22 +87,7 @@ class Laberinto:
     # ── A* ────────────────────────────────────────────────────────────────────────
 
     def a_star(maze, h):
-        """
-        Búsqueda A* (A-estrella).
 
-        Expande el nodo con menor f(n) = g(n) + h(n), donde:
-        g(n) = costo real acumulado desde el inicio hasta n
-        h(n) = estimación heurística de n al objetivo
-        f(n) = estimación del costo total del camino a través de n
-
-        A diferencia de Greedy, sí considera el costo ya pagado (g).
-        Esto garantiza el camino óptimo si la heurística es ADMISIBLE
-        (nunca sobreestima el costo real).
-
-        heap: (f(n), g(n), nodo, camino)
-        Se incluye g en la tupla porque si dos nodos tienen igual f,
-        heapq desempata por el segundo elemento (g).
-        """
         start, goal = Laberinto.__get_inicio_fin(maze)
         heap = [(h(start, goal), 0, start, [start])]
         visited = {}

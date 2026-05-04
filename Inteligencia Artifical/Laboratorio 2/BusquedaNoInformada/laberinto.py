@@ -36,7 +36,7 @@ class Laberinto:
         return start, goal
 
     def __get_vecinos(maze, r, c):
-        """Devuelve celdas adyacentes válidas (sin obstáculos, dentro del grid)."""
+
         directions = [(-1,0),(1,0),(0,-1),(0,1)]  # arriba, abajo, izq, der
         result = []
         for dr, dc in directions:
@@ -88,13 +88,7 @@ class Laberinto:
 
     # --- UCS ---
     def ucs(maze, cost_map=None):
-        """
-        cost_map: dict {(r,c): costo} para celdas con costo variable.
-        Si es None, todas las celdas tienen costo 1 (equivale a BFS en resultado).
-        """
         start, goal = Laberinto.__get_inicio_fin(maze)
-        # heapq: min-heap, pop() devuelve el elemento de menor costo → O(log n)
-        # Cada elemento: (costo_acumulado, posición, camino)
         heap = [(0, start, [start])]
         visited = {}   # nodo → menor costo con que fue visitado
         expanded = 0
@@ -114,11 +108,7 @@ class Laberinto:
         return None, float('inf'), expanded
 
     def print_path(maze, path, name):
-        """
-        Imprime el laberinto con el camino marcado con '*'.
-        El inicio y fin conservan sus letras (S, G).
-        Permite visualizar visualmente el recorrido de cada algoritmo.
-        """
+
         grid = [row[:] for row in maze]  # copia para no modificar el original
         for (r, c) in path:
             if grid[r][c] not in ('S', 'G'):
@@ -136,16 +126,11 @@ class Laberinto:
         Laberinto.print_path(maze, dfs_path, "DFS")
         Laberinto.print_path(maze, ucs_path, "UCS")
 
-        # ── PUNTO 4: Comparación de nodos expandidos ──────────────────────────
         print("\n=== PUNTO 4: Nodos expandidos ===")
         print(f"  BFS: {bfs_exp} nodos  | longitud camino: {len(bfs_path)}")
         print(f"  DFS: {dfs_exp} nodos  | longitud camino: {len(dfs_path)}")
         print(f"  UCS: {ucs_exp} nodos  | longitud camino: {len(ucs_path)} | costo total: {ucs_cost}")
 
-        # ── PUNTO 5: Complejidad temporal y espacial ───────────────────────────
-        # b = factor de ramificación = máximo de vecinos posibles = 4 (grilla)
-        # d = profundidad de la solución = longitud del camino encontrado
-        # m = profundidad máxima del árbol = total de celdas libres
         celdas_libres = sum(1 for fila in maze for c in fila if c != '#')
         b = 4
         d_bfs = len(bfs_path)
