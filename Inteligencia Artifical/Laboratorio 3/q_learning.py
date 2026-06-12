@@ -137,6 +137,7 @@ class Q_learning:
 
 if __name__ == "__main__":
     env = gym.make('FrozenLake-v1', is_slippery=True)
+    env = gym.wrappers.RecordEpisodeStatistics(env, buffer_length=10000)
     agent = Q_learning(env)
     agent.resultados()
     agent.test_agent(env)
