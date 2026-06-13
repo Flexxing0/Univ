@@ -188,10 +188,6 @@ def run_parte_a():
 def q_learning(env, episodes=10000, alpha=0.1, gamma=0.99,
                epsilon=1.0, epsilon_decay=0.999, epsilon_min=0.01):
     """
-        env: entorno de Gym
-        episodes: cantidad de episodios de entrenamiento
-        alpha: tasa de aprendizaje
-        gamma: factor de descuento
         epsilon: probabilidad inicial de exploracion
         epsilon_decay: decaimiento de epsilon por episodio
         epsilon_min: valor minimo de epsilon
@@ -201,7 +197,6 @@ def q_learning(env, episodes=10000, alpha=0.1, gamma=0.99,
     """
     n_states  = env.observation_space.n
     n_actions = env.action_space.n
-
     # Inicializa la tabla Q con 0s
     Q = np.zeros((n_states, n_actions))
     rewards = []
@@ -218,10 +213,9 @@ def q_learning(env, episodes=10000, alpha=0.1, gamma=0.99,
                 action = env.action_space.sample() # exploracion
             else:
                 action = np.argmax(Q[state]) # explotacion
-
+                
             next_state, reward, terminated, truncated, _ = env.step(action)
             done = terminated or truncated
-
             # Bellman off-policy
             best_next = np.max(Q[next_state])
             Q[state, action] += alpha * (reward + gamma * best_next - Q[state, action])

@@ -5,13 +5,13 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from reportlab.lib import colors
 
-# ── Constantes del entorno ──────────────────────────────────────
+#Constantes del entorno 
 LAKE_MAP   = ["SFFF", "FHFH", "FFFH", "HFFG"]
 CELL_LABEL = {s: LAKE_MAP[s // 4][s % 4] for s in range(16)}
 ARROW      = {0: "←", 1: "↓", 2: "→", 3: "↑"}
 ACTION_HDR = ["← (0)", "↓ (1)", "→ (2)", "↑ (3)"]
 
-# ── Obtener resultados ──────────────────────────────────────────
+#Obtener resultados
 vi_results = run_parte_a()
 ql_results = run_parte_b(vi_results)
 plot_comparison(vi_results, ql_results)
@@ -26,7 +26,7 @@ pol_ql_det = ql_results["Deterministico"]["policy"]
 Q_sto      = ql_results["Estocastico"]["Q"]
 pol_ql_sto = ql_results["Estocastico"]["policy"]
 
-# ── Funciones build_* ───────────────────────────────────────────
+# Funciones build
 
 def build_value_table(V):
     rows = [["Estado", "Celda", "V*(s)"]]      # header
@@ -65,7 +65,7 @@ def build_q_table(Q):
             f"{Q[s,3]:.4f}",
             f"{ARROW[best_a]} ({best_a})"
         ])
-        highlight_cols.append(best_a + 2)   # +2 porque Estado y Celda ocupan col 0 y 1
+        highlight_cols.append(best_a + 2)  
     return rows, highlight_cols
 
 # ── Estilo base para todas las tablas ──────────────────────────
@@ -131,7 +131,7 @@ def make_reportlab_q_table(Q, highlight_color="#bbdefb"):
     t.setStyle(ts)
     return t
 
-# ── Armar el PDF ───────────────────────────────────────────────
+# Arma el PDF
 
 styles = getSampleStyleSheet()
 h1      = styles["Heading1"]
