@@ -65,25 +65,37 @@ def estadisticos_descriptivos():
     print(estadisticos.head(10)) 
     estadisticos.to_csv("estadisticos_descriptivos.csv")
 
-#arma df
-df = x.copy()
-df['target'] = y
-print(df.isnull().sum().sum())  
-print(df.dtypes)
-columnas = df.columns.values.tolist()
-prediccion = columnas[:30]
-objetivo = columnas[30]
-x_train,x_test,y_train,y_test= train_test_split(df[prediccion],df[objetivo],test_size=0.30,stratify=df[objetivo],random_state=56)
-modelo_logistica = LogisticRegression(max_iter=10000, random_state=42)
-modelo_arbol     = DecisionTreeClassifier(random_state=42)
-modelo_bosque    = RandomForestClassifier(random_state=42)
-modelo_red       = MLPClassifier(max_iter=1000, random_state=42)
+def armar_df():
+    df = x.copy()
+    df['target'] = y
+    print(df.isnull().sum().sum())  
+    print(df.dtypes)
+    return df
 
-# 2. Entrenarlos todos con tus datos de entrenamiento (X_train, y_train del paso 4)
-modelo_logistica.fit(x_train, y_train)
-modelo_arbol.fit(x_train, y_train)
-modelo_bosque.fit(x_train, y_train)
-modelo_red.fit(x_train, y_train)
+def split(df):
+    columnas = df.columns.values.tolist()
+    prediccion = columnas[:30]
+    objetivo = columnas[30]
+    x_train,x_test,y_train,y_test= train_test_split(df[prediccion],df[objetivo],test_size=0.30,stratify=df[objetivo],random_state=56)
+    return x_train,x_test,y_train,y_test
+
+def modelos():
+    modelo_logistica = LogisticRegression(max_iter=10000, random_state=42)
+    modelo_arbol     = DecisionTreeClassifier(random_state=42)
+    modelo_bosque    = RandomForestClassifier(random_state=42)
+    modelo_red       = MLPClassifier(max_iter=1000, random_state=42)
+    modelos = {
+        "Regresión Logística": modelo_logistica,
+        "Árbol de Decisión": modelo_arbol,
+        "Random Forest": modelo_bosque,
+        "Red Neuronal (MLP)": modelo_red
+    }
+    return modelos
+
+def entrenamiento(modelos,x_train,y_train):
+    for nombre, modelo in modelos.items():
+        modelo.fit(x_train, y_train)
+        print(f"Modelo {nombre} entrenado exitosamente")
 
 
 
