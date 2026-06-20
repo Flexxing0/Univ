@@ -1,4 +1,5 @@
 import math
+import copy
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -91,13 +92,39 @@ def modelos():
         "Red Neuronal (MLP)": modelo_red
     }
     return modelos
-
+#con los datos de entrenamiento podemos sacar feature_importances(pto9), para saber variables determinantes
 def entrenamiento(modelos,x_train,y_train):
-    for nombre, modelo in modelos.items():
+    modelos_entrenados=copy.deepcopy(modelos)
+    for nombre, modelo in modelos_entrenados.items():
         modelo.fit(x_train, y_train)
+        modelos_entrenados[nombre]=modelo
         print(f"Modelo {nombre} entrenado exitosamente")
-
-
+        
+    return modelos_entrenados
+#con esto hacemos pto6
+def tests(modelos_entrenados,x_test,y_test):
+    resultados = []
+    
+    for nombre, modelo in modelos_entrenados.items():
+        # El método predict SOLO recibe x_test
+        predicciones = modelo.predict(x_test)
+        
+        # Calculamos las métricas (usando pos_label=0 para Maligno)
+        acc = accuracy_score(y_test, predicciones)
+        prec = precision_score(y_test, predicciones, pos_label=0)
+        rec = recall_score(y_test, predicciones, pos_label=0)
+        f1 = f1_score(y_test, predicciones, pos_label=0)
+        
+        resultados.append({
+            "Modelo": nombre,
+            "Accuracy": acc,
+            "Precision": prec,
+            "Recall": rec,
+            "F1-Score": f1
+        })
+        
+    # Devolvemos un DataFrame listo con la comparativa (Punto 6)
+    return pd.DataFrame(resultados)
 
 if __name__ == "__main__":
     graficos_iniciales()
