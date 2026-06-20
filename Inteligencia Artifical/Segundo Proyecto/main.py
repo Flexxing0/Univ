@@ -129,3 +129,9 @@ def tests(modelos_entrenados,x_test,y_test):
 if __name__ == "__main__":
     graficos_iniciales()
     estadisticos_descriptivos()
+    df = armar_df()
+    x_train,x_test,y_train,y_test= split(df)
+    modelos_entrenados = entrenamiento(modelos(),x_train,y_train)
+    resultados = tests(modelos_entrenados,x_test,y_test)
+    print(resultados)
+    
