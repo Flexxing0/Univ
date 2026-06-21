@@ -1,16 +1,8 @@
-import math
-import numpy as np
+from sklearn.preprocessing import LabelEncoder
 import pandas as pd
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-from collections import Counter
 from sklearn.tree import DecisionTreeClassifier,plot_tree #arbol de decision y ploteo
-from sklearn.model_selection import train_test_split #herramienta de corte de dataset
-from sklearn.metrics import ConfusionMatrixDisplay #matriz de confusión
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-from scipy.stats import uniform, poisson
+import copy
 
 datos = [
     # EJ,  Estado,      Temperatura, Humedad, Viento,  Clase
@@ -32,4 +24,37 @@ datos = [
 
 df = pd.DataFrame(datos, columns=["EJ", "Estado", "Temperatura", "Humedad", "Viento", "JuegoTenis"])
 
+df.drop("EJ",axis=1,inplace=True)
+df_transformado = copy.deepcopy(df)
+columnas = df.columns.values.tolist()
+prediccion = columnas[:4]
+x = copy.deepcopy(df[prediccion])
+objetivo = columnas[4]
+y = copy.deepcopy(df[objetivo])
+print(prediccion,objetivo)
+
 print(df)
+encoders = {}
+for columna in df.columns:
+    le = LabelEncoder()
+    df_transformado[columna] = le.fit_transform(df[columna])
+    encoders[columna] = le 
+
+X = df_transformado[['Estado', 'Temperatura', 'Humedad', 'Viento']]
+y = df_transformado['JuegoTenis']
+
+arbol = DecisionTreeClassifier(criterion="entropy", min_samples_split=3, random_state=40)
+arbol.fit(X, y)
+
+plt.figure(figsize=(12, 8))
+plot_tree(
+    arbol, 
+    feature_names=list(X.columns), 
+    class_names=list(encoders['JuegoTenis'].classes_), 
+    filled=True, 
+    rounded=True,
+    fontsize=10
+)
+
+plt.savefig("arbol.png", dpi=150)
+plt.close()
