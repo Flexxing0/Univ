@@ -28,7 +28,6 @@ def estandarizar_datos(X):
     """Punto 12"""
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
-    # Convertimos de nuevo a DataFrame para mantener consistencia visual si fuera necesario
     X_scaled_df = pd.DataFrame(X_scaled, columns=X.columns)
     print("PUNTO 12: DATOS ESTANDARIZADOS")
     print("Media de las variables transformadas (esperada ~0):\n", X_scaled_df.mean().round(2).values)
@@ -38,7 +37,6 @@ def estandarizar_datos(X):
 
 def aplicar_pca(X_scaled):
     """Punto 13"""
-    # Instanciamos PCA fijando una semilla aleatoria por reproducibilidad
     pca = PCA(n_components=2, random_state=42)
     X_pca = pca.fit_transform(X_scaled)
     
@@ -54,11 +52,10 @@ def analizar_kmeans_metodo_codo_y_silhouette(X_scaled):
     """Puntos 14, 15 y 16"""
     inercias = []
     siluetas = []
-    valores_k = range(2, 8) # K entre 2 y 7 (el límite superior en range es exclusivo)
+    valores_k = range(2, 8) 
     
     print("=== PUNTOS 14, 15 Y 16: ENTRENAMIENTO KMEANS ===")
     for k in valores_k:
-        # Usamos n_init='auto' por compatibilidad y fijamos random_state
         kmeans = KMeans(n_clusters=k, n_init='auto', random_state=42)
         kmeans.fit(X_scaled)
         

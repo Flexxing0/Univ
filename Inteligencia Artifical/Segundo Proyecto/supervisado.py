@@ -67,6 +67,36 @@ def estadisticos_descriptivos():
     estadisticos = x.describe().T
     print(estadisticos.head(10)) 
     estadisticos.to_csv("estadisticos_descriptivos.csv")
+    
+def boxplots(df):
+        # Asumiendo que tenés tu 'df_completo' con la columna 'diagnostic' ('Benign' / 'Malignant')
+
+    # Gráfico 1: Radio y Textura (Escala similar)
+    fig, ax = plt.subplots(figsize=(8, 5))
+    df.boxplot(column=['mean radius', 'mean texture'], by='target', ax=ax)
+    ax.set_title('Distribución de Radio y Textura Medios')
+    plt.suptitle('') # Quita el título automático molesto de Pandas
+    plt.tight_layout()
+    plt.savefig('boxplot_radio_textura.png', dpi=300)
+    plt.close()
+
+    # Gráfico 2: Área (Escala gigante - Va sola)
+    fig, ax = plt.subplots(figsize=(6, 5))
+    df.boxplot(column=['mean area'], by='target', ax=ax)
+    ax.set_title('Distribución del Área Media')
+    plt.suptitle('')
+    plt.tight_layout()
+    plt.savefig('boxplot_area.png', dpi=300)
+    plt.close()
+
+    # Gráfico 3: Forma e Irregularidades (Escala pequeña entre 0 y 1)
+    fig, ax = plt.subplots(figsize=(8, 5))
+    df.boxplot(column=['mean compactness', 'mean concavity'], by='target', ax=ax)
+    ax.set_title('Distribución de Compacidad y Concavidad Medias')
+    plt.suptitle('')
+    plt.tight_layout()
+    plt.savefig('boxplot_forma_irregular.png', dpi=300)
+    plt.close()
 
 def armar_df():
     df = x.copy()
@@ -349,6 +379,7 @@ if __name__ == "__main__":
     estadisticos_descriptivos()
     #PTO4
     df = armar_df()
+    boxplots(df)
     x_train,x_test,y_train,y_test= split(df)
     #PTO5
     modelos_entrenados = entrenamiento(modelos(),x_train,y_train)
