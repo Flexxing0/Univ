@@ -298,42 +298,69 @@ def grafica_resultados(resultados,opcion):
     plt.savefig(f'comparativa_general_modelos_{opcion}.png', dpi=300)
     plt.close()
     
-    print(f"¡Gráfico 'comparativa_general_modelos_{opcion}.png' generado con éxito!")
+    print(f"¡Gráfico 'comparativa_general_modelos_{opcion}.png' creado")
 
 def optimizar_random_forest(x_train, y_train):
-    print("\n=== OPTIMIZANDO HIPERPARÁMETROS CON GRIDSEARCHCV ===")
+    print("\n OPTIMIZANDO HIPERPARÁMETROS CON GRIDSEARCHCV ")
     
-    # 1. Instanciamos un modelo base vacío
     rf_base = RandomForestClassifier(random_state=42)
     
-    # 2. Definimos la "grilla" de parámetros que queremos probar
-    # Probaremos combinaciones de cantidad de árboles, profundidad y criterio de división
     param_grid = {
         'n_estimators': [50, 100, 200],
-        'max_depth': [None,3, 5, 10],
+        'max_depth': [None, 3, 5, 10],
         'criterion': ['gini', 'entropy'],
-        'max_features': ['sqrt','log2',None]
-        }
+        'max_features': ["sqrt", "log2"]
+    }
     
-    # 3. Configuramos el GridSearchCV
-    # cv=5 significa que usará Validación Cruzada de 5 pliegues
-    # scoring='f1' hará que busque la combinación que logre el mejor F1-Score
     grid_search = GridSearchCV(
         estimator=rf_base, 
         param_grid=param_grid, 
         cv=5, 
         scoring='f1', 
-        n_jobs=-1 # Usa todos los núcleos de tu procesador para ir más rápido
+        n_jobs=-1 
     )
     
-    # 4. Ejecutamos la búsqueda (esto va a probar las 18 combinaciones posibles 5 veces cada una)
     grid_search.fit(x_train, y_train)
     
-    # 5. Mostramos los resultados en la terminal
     print(f"Mejores parámetros encontrados: {grid_search.best_params_}")
     print(f"Mejor F1-Score en entrenamiento: {grid_search.best_score_:.4f}")
+
+    resultados_grid = pd.DataFrame(grid_search.cv_results_)
     
-    # Devuelve el mejor modelo ya entrenado con la configuración ganadora
+    resultados_grid['descripcion_params'] = resultados_grid['params'].apply(
+        lambda p: f"Crit: {p['criterion']} | Depth: {p['max_depth'] if p['max_depth'] is not None else 'Unlim'} | Trees: {p['n_estimators']} | Features: {p['max_features']}"
+    )
+    
+    top_combinaciones = resultados_grid.sort_values(by='mean_test_score', ascending=False).head(5)
+    
+    fig, ax = plt.subplots(figsize=(10, 5))
+    
+    scores = top_combinaciones['mean_test_score'].values[::-1]
+    nombres_comb = top_combinaciones['descripcion_params'].values[::-1]
+    
+    colores_barras = ['#bdc3c7'] * 4 + ['#e67e22'] 
+    barras = ax.barh(nombres_comb, scores, color=colores_barras, edgecolor='black', height=0.6)
+    
+    for barra in barras:
+        ancho = barra.get_width()
+        ax.annotate(f' F1: {ancho:.4f}',
+                    xy=(ancho, barra.get_y() + barra.get_height() / 2),
+                    xytext=(5, 0),
+                    textcoords="offset points",
+                    ha='left', va='center', fontsize=9, fontweight='bold')
+                    
+    ax.set_title("Top 5 Combinaciones de Hiperparámetros en Grid Search", fontsize=12, fontweight='bold')
+    ax.set_xlabel("F1-Score Promedio (Validación Cruzada - 5 Folds)", fontsize=10)
+    ax.set_xlim(0, 1.15) 
+    ax.grid(axis='x', linestyle='--', alpha=0.5)
+    
+    plt.tight_layout()
+    plt.savefig('punto8_gridsearch_mejores_parametros.png', dpi=300)
+    plt.close()
+    
+    print("'punto8_gridsearch_mejores_parametros.png' creado")
+    # =========================================================================
+    
     return grid_search.best_estimator_
 
 def comparativa_bosques(bosque_original, bosque_optimizado, y_test):
@@ -352,14 +379,12 @@ def comparativa_bosques(bosque_original, bosque_optimizado, y_test):
         f1_score(y_test, bosque_optimizado, pos_label=0)
     ]
     
-    # 3. Configuración del gráfico
     metricas_nombres = ['Accuracy', 'Precision', 'Recall', 'F1-Score']
     posiciones = np.arange(len(metricas_nombres))
     ancho_barra = 0.35
     
     fig, ax = plt.subplots(figsize=(10, 6))
     
-    # Usamos el nombre del modelo dinámicamente en las etiquetas
     barras_orig = ax.bar(posiciones - ancho_barra/2, metricas_orig, ancho_barra, label=f'{bosque_original["Modelo"]} Original', color='#34495e')
     barras_tune = ax.bar(posiciones + ancho_barra/2, metricas_tune, ancho_barra, label="Random Forest Optimizado", color='#e67e22')
     
@@ -371,7 +396,6 @@ def comparativa_bosques(bosque_original, bosque_optimizado, y_test):
     ax.legend(loc='upper right')
     ax.grid(axis='y', linestyle='--', alpha=0.5)
     
-    # Función interna para poner los números sobre las barras
     for barras in [barras_orig, barras_tune]:
         for barra in barras:
             alto = barra.get_height()
@@ -382,17 +406,16 @@ def comparativa_bosques(bosque_original, bosque_optimizado, y_test):
                         ha='center', va='bottom', fontsize=9, fontweight='bold')
             
     plt.tight_layout()
-    # Guardamos el archivo con el nombre del modelo (ej: "comparativa_regresión_logística.png")
     nombre_archivo = f"comparativa_optimizacion_{'Random Forest'.replace(' ', '_').lower()}.png"
     plt.savefig(nombre_archivo, dpi=300)
     plt.close()
     
     print(f"¡Gráfico guardado como '{nombre_archivo}'!")
 
-def variables_importantes(modelo_bosque, x_test):
+def variables_importantes(modelo_bosque, opcion):
     importancias = modelo_bosque.feature_importances_
     df_imp = pd.DataFrame({
-        "Variable": x_test.columns,
+        "Variable": x.columns,
         "Importancia": importancias
     }).sort_values("Importancia", ascending=False).head(10)
 
@@ -402,10 +425,10 @@ def variables_importantes(modelo_bosque, x_test):
 
     plt.figure(figsize=(10, 6))
     plt.barh(df_imp["Variable"][::-1], df_imp["Importancia"][::-1], color="green")
-    plt.title("Punto 9 – Importancia de Variables (Random Forest)")
+    plt.title(f"Punto 9 – Importancia de Variables (Random Forest) {opcion}")
     plt.xlabel("Importancia")
     plt.tight_layout()
-    plt.savefig("punto9_importancia_variables.png", dpi=150)
+    plt.savefig(f"punto9_importancia_variables_{opcion}.png", dpi=150)
     plt.close()
     print("\n terminado")
     
@@ -430,35 +453,32 @@ def arbol_reducido(x_train, y_train, x_test, y_test):
 if __name__ == "__main__":
     # PTO 1 y 2
     graficos_iniciales()
-    # PTO 3
-    
-    # ==========================================
+
     # CAMINO 1: EVALUACIÓN NORMAL
-    # ==========================================
+
     df_normal = armar_df()
-    boxplots(df_normal) # Hacemos los boxplots con los datos reales
+    boxplots(df_normal) #
     x_train_norm, x_test_norm, y_train_norm, y_test_norm = split(df_normal)
     
-    modelos_base_norm = modelos() # Instanciamos modelos limpios
+    modelos_base_norm = modelos() 
     modelonormal_entrenados = entrenamiento(modelos_base_norm, x_train_norm, y_train_norm)
     
     df_resultadosnormal, resultadosnormal = tests(modelonormal_entrenados, x_test_norm, y_test_norm, "Normal")
     grafica_resultados(resultadosnormal, "Normal")
     
-    # ==========================================
-    # CAMINO 2: EVALUACIÓN ESTANDARIZADA (La que te pedía KNN y Red Neuronal)
-    # ==========================================
+
+    # CAMINO 2: EVALUACIÓN ESTANDARIZADA ( KNN y Red Neuronal)
     df_estandarizado = armardf_estandarizado()
     x_train_std, x_test_std, y_train_std, y_test_std = split(df_estandarizado)
     
-    modelos_base_std = modelos() # Instanciamos modelos limpios nuevos para el escalado
+    modelos_base_std = modelos() 
     modeloestandarizado_entrenados = entrenamiento(modelos_base_std, x_train_std, y_train_std)
     
     df_resultadosestandarizado, resultadosestandarizado = tests(modeloestandarizado_entrenados, x_test_std, y_test_std, "Estandarizado")
     grafica_resultados(resultadosestandarizado, "Estandarizado")
     
-    # ==========================================
-    # PUNTOS FINALES (8, 9 y 10) 
+
+    # PUNTOS (8, 9 y 10) 
     # Usamos los datos estandarizados que son los óptimos para la Red Neuronal y KNN
     # ==========================================
     # PTO 8: Optimización
@@ -466,8 +486,8 @@ if __name__ == "__main__":
     predicciones_tuneadas = mejor_bosque_tuneado.predict(x_test_norm)
     
     # PTO 9: Variables importantes
-    variables_importantes(mejor_bosque_tuneado, x_test_norm)
-    
+    variables_importantes(mejor_bosque_tuneado, "Optimizado")
+    variables_importantes(modelonormal_entrenados["Random Forest"], "No Optimizado")
     # Comparativa de bosques (buscando el original estandarizado para contrastar con el optimizado)
     for i in resultadosnormal:
         if i["Modelo"] == "Random Forest":
