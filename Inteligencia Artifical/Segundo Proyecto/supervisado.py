@@ -74,9 +74,17 @@ def boxplots(df):
     # 2. CALCULO MATEMÁTICO DE SELECCIÓN (Punto 3 y 4)
     # Calculamos la correlación absoluta con el target y sacamos el Top 10 (excluyendo al 'target' mismo)
     matriz_corr = df_temp.drop(columns=['Diagnóstico']).corr()
-    top_10_atributos = matriz_corr['target'].abs().sort_values(ascending=False).iloc[1:11].index.tolist()
+    top_10_serie = matriz_corr['target'].abs().sort_values(ascending=False).iloc[1:11]
+    top_10_atributos = top_10_serie.index.tolist()
     
-    print(f"Atributos seleccionados automáticamente por cálculo: {top_10_atributos}")
+    # IMPRESIÓN ELEGANTE EN CONSOLA
+    print("\n" + "="*60)
+    print("   TOP 10 ATRIBUTOS CON MAYOR CORRELACIÓN A LAS CLASES")
+    print("="*60)
+    for puesto, (atributo, valor) in enumerate(top_10_serie.items(), 1):
+        print(f"{puesto:02d} | {atributo:<25} | Correlación: {valor:.6f}")
+    print("="*60 + "\n")
+    
     
     # 3. SEPARACIÓN AUTOMÁTICA POR ESCALAS
     # Clasificamos las variables dinámicamente mirando el valor máximo absoluto que alcanzan en los datos
@@ -186,8 +194,8 @@ def entrenamiento(modelos, x_train, y_train):
     for nombre, modelo in modelo_entrenar.items():
         modelo.fit(x_train, y_train)
         modelo_entrenar[nombre]=modelo
-        print(f"Modelo {nombre} entrenado exitosamente")
-        
+        print(f"{nombre} accuracy: {modelo.score(x_train, y_train)}")
+    print("Modelos entrenados exitosamente")
     return modelo_entrenar
 
 #con esto hacemos pto6,7 y 9
