@@ -1,3 +1,4 @@
+from sklearn.preprocessing import StandardScaler
 import math
 import copy
 import numpy as np
@@ -8,6 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from collections import Counter
 from sklearn.tree import DecisionTreeClassifier,plot_tree, export_text #arbol de decision y ploteo
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split #herramienta de corte de dataset
 from sklearn.metrics import ConfusionMatrixDisplay #matriz de confusión
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
@@ -62,47 +64,98 @@ def graficos_iniciales():
     plt.savefig("distribucion_clases2.png")
     plt.close()
     
-def estadisticos_descriptivos():
-    
-    estadisticos = x.describe().T
-    print(estadisticos.head(10)) 
-    estadisticos.to_csv("estadisticos_descriptivos.csv")
-    
 def boxplots(df):
-        # Asumiendo que tenés tu 'df_completo' con la columna 'diagnostic' ('Benign' / 'Malignant')
+    print("\n=== GENERANDO BOXPLOTS AUTOMÁTICOS BASADOS EN TOP 10 DE CORRELACIÓN ===")
+    
+    # 1. Creamos una copia para no alterar el DataFrame original y preparamos las etiquetas
+    df_temp = copy.deepcopy(df)
+    df_temp['Diagnóstico'] = df_temp['target'].map({0: 'Maligno (0)', 1: 'Benigno (1)'})
+    
+    # 2. CALCULO MATEMÁTICO DE SELECCIÓN (Punto 3 y 4)
+    # Calculamos la correlación absoluta con el target y sacamos el Top 10 (excluyendo al 'target' mismo)
+    matriz_corr = df_temp.drop(columns=['Diagnóstico']).corr()
+    top_10_atributos = matriz_corr['target'].abs().sort_values(ascending=False).iloc[1:11].index.tolist()
+    
+    print(f"Atributos seleccionados automáticamente por cálculo: {top_10_atributos}")
+    
+    # 3. SEPARACIÓN AUTOMÁTICA POR ESCALAS
+    # Clasificamos las variables dinámicamente mirando el valor máximo absoluto que alcanzan en los datos
+    atributos_micro = []  # Para los que se mueven entre 0 y 1 (como concave points)
+    atributos_media = []  # Para rangos intermedios (como los radios, de 5 a 50)
+    atributos_macro = []  # Para valores gigantes (como perímetros y áreas, > 50)
+    
+    for col in top_10_atributos:
+        val_max = df_temp[col].abs().max()
+        if val_max <= 1.0:
+            atributos_micro.append(col)
+        elif val_max <= 50.0:
+            atributos_media.append(col)
+        else:
+            atributos_macro.append(col)
+            
+    # 4. GENERACIÓN DE LOS GRÁFICOS DINÁMICOS
+    
+    # --- Gráfico 1: Escala Micro (Decimales) ---
+    if atributos_micro:
+        fig, ax = plt.subplots(figsize=(10, 6))
+        df_temp.boxplot(column=atributos_micro, by='Diagnóstico', ax=ax)
+        ax.set_title('Top Correlación - Características de Escala Micro (0 a 1)', fontsize=12, fontweight='bold')
+        ax.set_ylabel('Valor Decimal')
+        plt.suptitle('')
+        plt.tight_layout()
+        plt.savefig('boxplot_auto_micro.png', dpi=300)
+        plt.close()
+        print("-> 'boxplot_auto_micro.png' generado.")
 
-    # Gráfico 1: Radio y Textura (Escala similar)
-    fig, ax = plt.subplots(figsize=(8, 5))
-    df.boxplot(column=['mean radius', 'mean texture'], by='target', ax=ax)
-    ax.set_title('Distribución de Radio y Textura Medios')
-    plt.suptitle('') # Quita el título automático molesto de Pandas
-    plt.tight_layout()
-    plt.savefig('boxplot_radio_textura.png', dpi=300)
-    plt.close()
+    # --- Gráfico 2: Escala Media (Radios / Texturas intermedias) ---
+    if atributos_media:
+        fig, ax = plt.subplots(figsize=(8, 5))
+        df_temp.boxplot(column=atributos_media, by='Diagnóstico', ax=ax)
+        ax.set_title('Top Correlación - Características de Escala Media', fontsize=12, fontweight='bold')
+        ax.set_ylabel('Unidades de Medida')
+        plt.suptitle('')
+        plt.tight_layout()
+        plt.savefig('boxplot_auto_media.png', dpi=300)
+        plt.close()
+        print("-> 'boxplot_auto_media.png' generado.")
 
-    # Gráfico 2: Área (Escala gigante - Va sola)
-    fig, ax = plt.subplots(figsize=(6, 5))
-    df.boxplot(column=['mean area'], by='target', ax=ax)
-    ax.set_title('Distribución del Área Media')
-    plt.suptitle('')
-    plt.tight_layout()
-    plt.savefig('boxplot_area.png', dpi=300)
-    plt.close()
+    # --- Gráfico 3: Escala Macro (Áreas y Perímetros separados dinámicamente para no aplastarse) ---
+    if atributos_macro:
+        # Si hay más de un atributo macro, usamos subplots para que cada uno mantenga su legibilidad
+        num_macro = len(atributos_macro)
+        fig, ejes = plt.subplots(1, num_macro, figsize=(6 * num_macro, 6))
+        
+        # Si es solo 1 atributo macro, 'ejes' no es una lista, lo convertimos para poder iterar tranquilamente
+        if num_macro == 1:
+            ejes = [ejes]
+            
+        for idx, col in enumerate(atributos_macro):
+            df_temp.boxplot(column=[col], by='Diagnóstico', ax=ejes[idx])
+            ejes[idx].set_title(f'{col}')
+            ejes[idx].set_ylabel('Escala Absoluta')
+            
+        plt.suptitle('Top Correlación - Características de Escala Macro (Magnitudes Grandes)', fontsize=14, fontweight='bold')
+        plt.tight_layout()
+        plt.savefig('boxplot_auto_macro.png', dpi=300)
+        plt.close()
+        print("-> 'boxplot_auto_macro.png' generado.")
 
-    # Gráfico 3: Forma e Irregularidades (Escala pequeña entre 0 y 1)
-    fig, ax = plt.subplots(figsize=(8, 5))
-    df.boxplot(column=['mean compactness', 'mean concavity'], by='target', ax=ax)
-    ax.set_title('Distribución de Compacidad y Concavidad Medias')
-    plt.suptitle('')
-    plt.tight_layout()
-    plt.savefig('boxplot_forma_irregular.png', dpi=300)
-    plt.close()
+def armardf_estandarizado():
+    print("estandarizado")
+    scaler = StandardScaler() 
+    x_esc = scaler.fit_transform(copy.deepcopy(x))
+    df_estandarizado = pd.DataFrame(x_esc, columns=x.columns)
+    df_estandarizado['target'] = copy.deepcopy(y)
+    print(df_estandarizado.isnull().sum().sum())  
+    print(df_estandarizado)
+    return df_estandarizado
 
 def armar_df():
-    df = x.copy()
-    df['target'] = y
+    print("normal")
+    df = copy.deepcopy(x)
+    df['target'] = copy.deepcopy(y)
     print(df.isnull().sum().sum())  
-    print(df.dtypes)
+    print(df)
     return df
 
 def split(df):
@@ -117,26 +170,28 @@ def modelos():
     modelo_arbol     = DecisionTreeClassifier(random_state=42)
     modelo_bosque    = RandomForestClassifier(random_state=42)
     modelo_red       = MLPClassifier(max_iter=1000, random_state=42)
+    modelo_knn       = KNeighborsClassifier(n_neighbors=5)
     modelos = {
         "Regresion Logistica": modelo_logistica,
         "Arbol de Decision": modelo_arbol,
         "Random Forest": modelo_bosque,
-        "Red Neuronal (MLP)": modelo_red
+        "Red Neuronal (MLP)": modelo_red,
+        "KNN": modelo_knn
     }
     return modelos
 
 #con los datos de entrenamiento podemos sacar feature_importances(pto9), para saber variables determinantes
-def entrenamiento(modelos,x_train,y_train):
-    modelos_entrenados=copy.deepcopy(modelos)
-    for nombre, modelo in modelos_entrenados.items():
+def entrenamiento(modelos, x_train, y_train):
+    modelo_entrenar=copy.deepcopy(modelos)
+    for nombre, modelo in modelo_entrenar.items():
         modelo.fit(x_train, y_train)
-        modelos_entrenados[nombre]=modelo
+        modelo_entrenar[nombre]=modelo
         print(f"Modelo {nombre} entrenado exitosamente")
         
-    return modelos_entrenados
+    return modelo_entrenar
 
 #con esto hacemos pto6,7 y 9
-def tests(modelos_entrenados,x_test,y_test):
+def tests(modelos_entrenados,x_test,y_test, opcion):
     resultados = []
     mejor_f1 = 0
     mejor_nombre = ""
@@ -160,10 +215,10 @@ def tests(modelos_entrenados,x_test,y_test):
             cmap=plt.cm.Blues,
             ax=ax 
         )
-        ax.set_title(f"Matriz de Confusion - {nombre}", fontsize=12, fontweight='bold')
+        ax.set_title(f"Matriz de Confusion - {nombre}-{opcion}", fontsize=12, fontweight='bold')
         ax.set_xlabel("Predicción")
         ax.set_ylabel("Real")
-        nombre_archivo = f"matriz_{nombre.replace(' ', '_').lower()}.png"
+        nombre_archivo = f"matriz_{nombre.replace(' ', '_').lower()}-{opcion}.png"
         plt.tight_layout()
         plt.savefig(nombre_archivo, dpi=300)
         plt.close()
@@ -188,18 +243,18 @@ def tests(modelos_entrenados,x_test,y_test):
     #pto7 se imprime mejor modelo
     print(f"\nMejor modelo: {mejor_nombre} (F1={mejor_f1:.4f})")
     disp = ConfusionMatrixDisplay.from_predictions( y_test, mejor_preds, display_labels=["Maligno (0)", "Benigno (1)"], cmap="Blues")
-    disp.ax_.set_title(f"Matriz de Confusion - {mejor_nombre}", fontsize=12, fontweight='bold')
+    disp.ax_.set_title(f"Matriz de Confusion - {mejor_nombre}-{opcion}", fontsize=12, fontweight='bold')
     disp.ax_.set_xlabel("Predicción")
     disp.ax_.set_ylabel("Real")
-    plt.savefig("punto7_matriz_confusion.png", bbox_inches='tight', dpi=150)
+    plt.savefig(f"punto7_matriz_confusion-{opcion}.png", bbox_inches='tight', dpi=150)
     plt.close()
     
     #pto9
-    variables_importantes(modelo_bosque)
+    
     # dataframe con comparativa pto6
     return pd.DataFrame(resultados), resultados
 
-def grafica_resultados(resultados):
+def grafica_resultados(resultados,opcion):
     
     print("\n=== GENERANDO GRÁFICO COMPARATIVO GENERAL (PUNTO 6) ===")
     metricas_nombres = ['Accuracy', 'Precision', 'Recall', 'F1-Score']
@@ -230,19 +285,20 @@ def grafica_resultados(resultados):
                         ha='center', va='bottom', fontsize=8, fontweight='bold')
 
     # Ajustes estéticos finales del gráfico
-    ax.set_title('Comparativa General de Rendimiento - Modelos Originales', fontsize=14, fontweight='bold')
+    ax.set_title(f'Comparativa General de Rendimiento - Modelos {opcion}', fontsize=14, fontweight='bold')
     ax.set_ylabel('Puntaje (Score)', fontsize=12)
     ax.set_xticks(posiciones)
     ax.set_xticklabels(metricas_nombres, fontsize=11)
     ax.set_ylim(0, 1.15) # Espacio para las etiquetas y la leyenda
-    ax.legend(loc='upper right', shadow=True)
+    #ax.legend(loc='upper right', shadow=True)
+    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     ax.grid(axis='y', linestyle='--', alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('comparativa_general_modelos.png', dpi=300)
+    plt.savefig(f'comparativa_general_modelos_{opcion}.png', dpi=300)
     plt.close()
     
-    print("¡Gráfico 'comparativa_general_modelos.png' generado con éxito!")
+    print(f"¡Gráfico 'comparativa_general_modelos_{opcion}.png' generado con éxito!")
 
 def optimizar_random_forest(x_train, y_train):
     print("\n=== OPTIMIZANDO HIPERPARÁMETROS CON GRIDSEARCHCV ===")
@@ -254,7 +310,7 @@ def optimizar_random_forest(x_train, y_train):
     # Probaremos combinaciones de cantidad de árboles, profundidad y criterio de división
     param_grid = {
         'n_estimators': [50, 100, 200],
-        'max_depth': [None, 5, 10],
+        'max_depth': [None,3, 5, 10],
         'criterion': ['gini', 'entropy'],
         'max_features': ['sqrt','log2',None]
         }
@@ -333,7 +389,7 @@ def comparativa_bosques(bosque_original, bosque_optimizado, y_test):
     
     print(f"¡Gráfico guardado como '{nombre_archivo}'!")
 
-def variables_importantes(modelo_bosque):
+def variables_importantes(modelo_bosque, x_test):
     importancias = modelo_bosque.feature_importances_
     df_imp = pd.DataFrame({
         "Variable": x_test.columns,
@@ -370,30 +426,56 @@ def arbol_reducido(x_train, y_train, x_test, y_test):
     plt.tight_layout()
     plt.savefig("punto10_arbol_reducido.png", bbox_inches='tight', dpi=150)
     plt.close()
-
-
+    
 if __name__ == "__main__":
-    #PTO1Y2
+    # PTO 1 y 2
     graficos_iniciales()
-    #PTO3
-    estadisticos_descriptivos()
-    #PTO4
-    df = armar_df()
-    boxplots(df)
-    x_train,x_test,y_train,y_test= split(df)
-    #PTO5
-    modelos_entrenados = entrenamiento(modelos(),x_train,y_train)
-    #PTO6,7Y9
-    df_resultados,resultados = tests(modelos_entrenados,x_test,y_test)
-    grafica_resultados(resultados)
-    #PTO8
-    mejor_bosque_tuneado = optimizar_random_forest(x_train, y_train)
-    predicciones_tuneadas = mejor_bosque_tuneado.predict(x_test)
-    for i in resultados:
+    # PTO 3
+    
+    # ==========================================
+    # CAMINO 1: EVALUACIÓN NORMAL
+    # ==========================================
+    df_normal = armar_df()
+    boxplots(df_normal) # Hacemos los boxplots con los datos reales
+    x_train_norm, x_test_norm, y_train_norm, y_test_norm = split(df_normal)
+    
+    modelos_base_norm = modelos() # Instanciamos modelos limpios
+    modelonormal_entrenados = entrenamiento(modelos_base_norm, x_train_norm, y_train_norm)
+    
+    df_resultadosnormal, resultadosnormal = tests(modelonormal_entrenados, x_test_norm, y_test_norm, "Normal")
+    grafica_resultados(resultadosnormal, "Normal")
+    
+    # ==========================================
+    # CAMINO 2: EVALUACIÓN ESTANDARIZADA (La que te pedía KNN y Red Neuronal)
+    # ==========================================
+    df_estandarizado = armardf_estandarizado()
+    x_train_std, x_test_std, y_train_std, y_test_std = split(df_estandarizado)
+    
+    modelos_base_std = modelos() # Instanciamos modelos limpios nuevos para el escalado
+    modeloestandarizado_entrenados = entrenamiento(modelos_base_std, x_train_std, y_train_std)
+    
+    df_resultadosestandarizado, resultadosestandarizado = tests(modeloestandarizado_entrenados, x_test_std, y_test_std, "Estandarizado")
+    grafica_resultados(resultadosestandarizado, "Estandarizado")
+    
+    # ==========================================
+    # PUNTOS FINALES (8, 9 y 10) 
+    # Usamos los datos estandarizados que son los óptimos para la Red Neuronal y KNN
+    # ==========================================
+    # PTO 8: Optimización
+    mejor_bosque_tuneado = optimizar_random_forest(x_train_norm, y_train_norm)
+    predicciones_tuneadas = mejor_bosque_tuneado.predict(x_test_norm)
+    
+    # PTO 9: Variables importantes
+    variables_importantes(mejor_bosque_tuneado, x_test_norm)
+    
+    # Comparativa de bosques (buscando el original estandarizado para contrastar con el optimizado)
+    for i in resultadosnormal:
         if i["Modelo"] == "Random Forest":
-            comparativa_bosques(i, predicciones_tuneadas, y_test)
+            comparativa_bosques(i, predicciones_tuneadas, y_test_norm)
+            
     print("\nReporte de Clasificación del Modelo Optimizado:")
-    print(classification_report(y_test, predicciones_tuneadas))
-    #PTO10
-    arbol_reducido(x_train, y_train, x_test, y_test)
+    print(classification_report(y_test_norm, predicciones_tuneadas))
+    
+    # PTO 10: Árbol reducido (Se puede hacer con los datos norm o std, preferible norm para reglas legibles)
+    arbol_reducido(x_train_norm, y_train_norm, x_test_norm, y_test_norm)
     
