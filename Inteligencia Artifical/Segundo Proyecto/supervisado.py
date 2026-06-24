@@ -162,8 +162,18 @@ def armar_df():
     print("normal")
     df = copy.deepcopy(x)
     df['target'] = copy.deepcopy(y)
-    print(df.isnull().sum().sum())  
-    print(df)
+    atributos = df.columns[:31]
+    print(df.isnull().sum().sum()) 
+    tabla_df = pd.DataFrame({
+        'N°': range(1, 32),
+        'Nombre del Atributo (X)': atributos
+    }) 
+    print("\n" + "="*50)
+    print("      TABLA DE ATRIBUTOS DEL DATASET (30)      ")
+    print("="*50)
+    # index=False hace que no se dibuje el índice por defecto de Pandas
+    print(tabla_df.to_string(index=False, justify='left'))
+    print("="*50 + "\n")
     return df
 
 def split(df):
