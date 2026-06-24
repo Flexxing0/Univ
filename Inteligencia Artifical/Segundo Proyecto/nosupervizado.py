@@ -7,9 +7,7 @@ from sklearn.datasets import load_iris
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score, adjusted_rand_score
-
-# --- FUNCIONES DEL PROCESO ---
+from sklearn.metrics import silhouette_score, adjusted_rand_score, v_measure_score # <-- Agregamos v_measure_score
 
 def cargar_y_describir_iris():
     """Punto 11: Carga el dataset Iris y describe sus variables."""
@@ -23,8 +21,6 @@ def cargar_y_describir_iris():
     print("Nombres de las variables:", list(X.columns))
     print("-" * 50)
     
-    # --- GRÁFICO NUEVO PARA EL PUNTO 11 ---
-    # Creamos un histograma para cada una de las 4 variables para ver cómo se distribuyen en bruto
     fig, ejes = plt.subplots(2, 2, figsize=(10, 8))
     columnas = list(X.columns)
     colores = ['#34495e', '#2ecc71', '#e74c3c', '#9b59b6']
@@ -58,8 +54,11 @@ def aplicar_pca(X_scaled):
     """Punto 13"""
     pca = PCA(n_components=2, random_state=42)
     X_pca = pca.fit_transform(X_scaled)
-    # ... (tus prints de varianza quedan igual)
-    return X_pca, pca # <-- RETORNAMOS AMBOS
+    print("PUNTO 13: ANÁLISIS COMPONENTES PRINCIPALES (PCA)")
+    print(f"Varianza explicada por componente: {pca.explained_variance_ratio_}")
+    print(f"Varianza acumulada total (2 componentes): {sum(pca.explained_variance_ratio_):.4f}")
+    print("-" * 50)
+    return X_pca, pca
 
 def analizar_kmeans_metodo_codo_y_silhouette(X_scaled):
     """Puntos 14, 15 y 16"""
@@ -72,10 +71,10 @@ def analizar_kmeans_metodo_codo_y_silhouette(X_scaled):
         kmeans = KMeans(n_clusters=k, n_init='auto', random_state=42)
         kmeans.fit(X_scaled)
         
-        #Inercia (Punto 15)
+        # Inercia (Punto 15)
         inercias.append(kmeans.inertia_)
         
-        #Coeficiente de Silhouette (Punto 16)
+        # Coeficiente de Silhouette (Punto 16)
         score_silueta = silhouette_score(X_scaled, kmeans.labels_)
         siluetas.append(score_silueta)
         
@@ -91,7 +90,7 @@ def analizar_kmeans_metodo_codo_y_silhouette(X_scaled):
     ax1.set_title('Evaluacion de Metricas Internas para KMeans', fontsize=14, fontweight='bold')
     
     # --- GRÁFICO 2: COEFIENTE DE SILHOUETTE (EJE DOBLE) ---
-    ax2 = ax1.twinx()  # Comparten el mismo eje X
+    ax2 = ax1.twinx()
     ax2.plot(valores_k, siluetas, marker='s', color='tab:orange', linewidth=2, linestyle='--', label='Silhouette')
     ax2.set_ylabel('Coeficiente de Silhouette', color='tab:orange', fontsize=12)
     ax2.tick_params(axis='y', labelcolor='tab:orange')
@@ -101,7 +100,7 @@ def analizar_kmeans_metodo_codo_y_silhouette(X_scaled):
     plt.close()
 
 def visualizar_clusters_y_clases_reales(X_pca, X_scaled, y_real, pca_transformer):
-    """Punto 17: Visualiza clusters con centroides y círculos de dispersión esférica."""
+    """Punto 17 y 18: Visualiza clusters con centroides, esferas e imprime métricas externas de contraste."""
     k_elegido = 3
     kmeans_final = KMeans(n_clusters=k_elegido, n_init='auto', random_state=42)
     kmeans_final.fit(X_scaled)
@@ -112,30 +111,26 @@ def visualizar_clusters_y_clases_reales(X_pca, X_scaled, y_real, pca_transformer
     centroides_2d = pca_transformer.transform(centroides_4d)
     
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6.5))
-    colores_clusters = ['#1f77b4', '#2ca02c', '#9467bd'] # Paleta bien diferenciada
+    colores_clusters = ['#1f77b4', '#2ca02c', '#9467bd']
     
     # =========================================================================
     # GRÁFICO IZQUIERDO: KMEANS CON CENTROIDES Y CÍRCULOS (NO SUPERVISADO)
     # =========================================================================
-    # Dibujamos los puntos individuales coloreados por su clúster asignado
     for i in range(k_elegido):
         puntos_cluster = X_pca[labels_pred == i]
         ax1.scatter(puntos_cluster[:, 0], puntos_cluster[:, 1], 
                     color=colores_clusters[i], s=50, alpha=0.7, label=f'Clúster {i}')
         
-        # Coordenadas del centroide actual en el plano PCA
         cent_x, cent_y = centroides_2d[i, 0], centroides_2d[i, 1]
         
-        # DIBUJAMOS EL CENTROIDE: Un marcador tipo "X" grande y llamativo
+        # Centroide (X grande)
         ax1.scatter(cent_x, cent_y, color='black', marker='X', s=250, 
                     edgecolor='white', linewidth=1.5, zorder=10)
         
-        # DIBUJAMOS EL CÍRCULO ENVOLVENTE: 
-        # Calculamos la distancia euclidiana al punto más lejano del clúster para definir el radio
+        # Círculo Envolvente
         distancias = np.sqrt(np.sum((puntos_cluster - [cent_x, cent_y]) ** 2, axis=1))
         radio_envolvente = np.max(distancias) if len(distancias) > 0 else 0.5
         
-        # Creamos el parche circular translúcido para denotar la frontera esférica
         circulo = plt.Circle((cent_x, cent_y), radio_envolvente, color=colores_clusters[i], 
                              fill=True, alpha=0.1, linestyle='--', linewidth=1.5, edgecolor=colores_clusters[i])
         ax1.add_patch(circulo)
@@ -155,30 +150,40 @@ def visualizar_clusters_y_clases_reales(X_pca, X_scaled, y_real, pca_transformer
     ax2.set_ylabel('Componente Principal 2')
     ax2.grid(True, linestyle='--', alpha=0.4)
     
-    # Leyenda para las especies reales
     clases_nombres = ['Setosa', 'Versicolor', 'Virginica']
     handlers, _ = scatter2.legend_elements()
     ax2.legend(handlers, clases_nombres, loc='upper right')
     
+    # =========================================================================
+    # CÁLCULO E INYECCIÓN DE MÉTRICAS EXTERNAS (PUNTO 18)
+    # =========================================================================
     ari = adjusted_rand_score(y_real, labels_pred)
-    print("PUNTO 17: ANÁLISIS DE COMPARACIÓN ")
-    print(f"Métrica Externa - Adjusted Rand Index (ARI): {ari:.4f}")
-    print("-" * 50)
+    v_measure = v_measure_score(y_real, labels_pred)
+    
+    # Añadimos un cuadro de texto prolijo en el gráfico izquierdo (KMeans) abajo a la izquierda
+    texto_metricas = f"Métricas Externas (Ground Truth):\n▶ ARI: {ari:.4f}\n▶ V-Measure: {v_measure:.4f}"
+    propiedades_caja = dict(boxstyle='round,pad=0.5', facecolor='white', edgecolor='#bdc3c7', alpha=0.85)
+    ax1.text(0.03, 0.04, texto_metricas, transform=ax1.transAxes, fontsize=10,
+             fontweight='bold', color='#2c3e50', bbox=propiedades_caja, zorder=20)
+    
+    # Impresión estructurada en la consola
+    print("\n" + "="*55)
+    print("   PUNTO 17 Y 18: EVALUACIÓN MEDIANTE MÉTRICAS EXTERNAS   ")
+    print("="*55)
+    print(f" Adjusted Rand Index (ARI)  | Valor: {ari:.4f}")
+    print(f" V-Measure Score (Homog/Comp) | Valor: {v_measure:.4f}")
+    print("="*55 + "\n")
     
     plt.tight_layout()
     plt.savefig('visualizacion_clusters_pca.png', dpi=300)
     plt.close()
-    print("¡Gráfico 'visualizacion_clusters_pca.png' generado con centroides y esferas!")
+    print("-> ¡Gráfico 'visualizacion_clusters_pca.png' generado e inyectado con los valores de las métricas!")
 
 # --- EJECUCIÓN DEL FLUJO NO SUPERVISADO ---
 if __name__ == "__main__":
     X_iris, y_iris = cargar_y_describir_iris()
     X_estandarizado = estandarizar_datos(X_iris)
-    
-    # Recibimos el plano y el transformador PCA
     X_plano_pca, objeto_pca = aplicar_pca(X_estandarizado)
     
     analizar_kmeans_metodo_codo_y_silhouette(X_estandarizado)
-    
-    # Pasamos el objeto_pca como cuarto parámetro
     visualizar_clusters_y_clases_reales(X_plano_pca, X_estandarizado, y_iris, objeto_pca)
