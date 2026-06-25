@@ -467,6 +467,31 @@ def arbol_reducido(x_train, y_train, x_test, y_test):
     plt.tight_layout()
     plt.savefig("punto10_arbol_reducido.png", bbox_inches='tight', dpi=150)
     plt.close()
+    return arbol
+    
+def graficar_importancia_atributos_arbol(modelo_arbol, nombre_columnas):
+    print("\nGANANCIA DE INFORMACIÓN (FEATURE IMPORTANCE)")
+    
+    importancias = modelo_arbol.feature_importances_
+    
+    df_importancia = pd.DataFrame({
+        'Atributo': nombre_columnas,
+        'Importancia': importancias
+    }).sort_values(by='Importancia', ascending=True) 
+    
+    df_top = df_importancia.tail(10)
+    
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.barh(df_top['Atributo'], df_top['Importancia'], color='#2980b9', edgecolor='black', alpha=0.8)
+    
+    ax.set_title("Top 10 Atributos con Mayor Ganancia de Información (Reducción de Gini)", fontsize=12, fontweight='bold')
+    ax.set_xlabel("Importancia Relativa ", fontsize=10)
+    ax.grid(axis='x', linestyle='--', alpha=0.5)
+    
+    plt.tight_layout()
+    plt.savefig('confirmacion_ganancia_informacion.png', dpi=300)
+    plt.close()
+    print(" ¡Gráfico 'confirmacion_ganancia_informacion.png'")
     
 if __name__ == "__main__":
     # PTO 1 y 2
@@ -515,5 +540,6 @@ if __name__ == "__main__":
     print(classification_report(y_test_norm, predicciones_tuneadas))
     
     # PTO 10: Árbol reducido (Se puede hacer con los datos norm o std, preferible norm para reglas legibles)
-    arbol_reducido(x_train_norm, y_train_norm, x_test_norm, y_test_norm)
+    arbol_reducido = arbol_reducido(x_train_norm, y_train_norm, x_test_norm, y_test_norm)
+    graficar_importancia_atributos_arbol(arbol_reducido, x_train_norm.columns)
     
