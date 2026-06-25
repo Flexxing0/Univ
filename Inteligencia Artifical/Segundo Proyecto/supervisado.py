@@ -522,8 +522,6 @@ if __name__ == "__main__":
     
 
     # PUNTOS (8, 9 y 10) 
-    # Usamos los datos estandarizados que son los óptimos para la Red Neuronal y KNN
-    # ==========================================
     # PTO 8: Optimización
     mejor_bosque_tuneado = optimizar_random_forest(x_train_norm, y_train_norm)
     predicciones_tuneadas = mejor_bosque_tuneado.predict(x_test_norm)
