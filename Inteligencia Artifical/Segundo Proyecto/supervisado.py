@@ -467,7 +467,7 @@ def graficar_importancia_atributos_arbol(modelo_arbol, nombre_columnas):
     fig, ax = plt.subplots(figsize=(10, 5))
     ax.barh(df_top['Atributo'], df_top['Importancia'], color='#2980b9', edgecolor='black', alpha=0.8)
     
-    ax.set_title("Top 10 Atributos con Mayor Ganancia de Información (Reducción de Gini)", fontsize=12, fontweight='bold')
+    ax.set_title("Top 10 Atributo de Mayor importancia (Reduccion impureza Gini)", fontsize=12, fontweight='bold')
     ax.set_xlabel("Importancia Relativa ", fontsize=10)
     ax.grid(axis='x', linestyle='--', alpha=0.5)
     
