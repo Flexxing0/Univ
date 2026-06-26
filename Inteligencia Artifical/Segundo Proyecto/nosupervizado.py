@@ -160,10 +160,10 @@ if __name__ == "__main__":
     X_plano_pca, objeto_pca = aplicar_pca(X_estandarizado)
     
 
-    k_sugerido = analizar_kmeans_metodo_codo_y_silhouette(X_estandarizado)
+    k_elegido_final = analizar_kmeans_metodo_codo_y_silhouette(X_estandarizado)
 
     print("\n[NOTA ACADÉMICA]: Aunque Silhouette maximiza en K=2, se selecciona K=3")
     print("                 para respetar las 3 clases biológicas del dataset Iris.")
-    k_elegido_final = 3 
+    #k_elegido_final = 3 
     
     visualizar_clusters_y_clases_reales(X_plano_pca, X_estandarizado, y_iris, objeto_pca, k_elegido_final)

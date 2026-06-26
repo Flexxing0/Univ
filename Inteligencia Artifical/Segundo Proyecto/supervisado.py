@@ -1,3 +1,4 @@
+from sklearn.metrics import make_scorer
 from sklearn.preprocessing import StandardScaler
 import math
 import copy
@@ -51,7 +52,7 @@ def graficos_iniciales():
     plt.xticks(rotation=0)
     plt.tight_layout()
     plt.savefig('distribucion_clases.png')
-    plt.close
+    plt.close()
     plt.figure(figsize=(6,6))
     etiquetas = ['Benigno (1)', 'Maligno (0)']
     plt.pie(
@@ -171,7 +172,7 @@ def split(df):
     columnas = df.columns.values.tolist()
     prediccion = columnas[:30]
     objetivo = columnas[30]
-    x_train,x_test,y_train,y_test= train_test_split(df[prediccion],df[objetivo],test_size=0.30,stratify=df[objetivo],random_state=56)
+    x_train,x_test,y_train,y_test= train_test_split(df[prediccion],df[objetivo],test_size=0.30,stratify=df[objetivo],random_state=42)
     return x_train,x_test,y_train,y_test
 
 def modelos():
@@ -320,12 +321,13 @@ def optimizar_random_forest(x_train, y_train):
         'criterion': ['gini', 'entropy'],
         'max_features': ["sqrt", "log2"]
     }
+    f1_maligno = make_scorer(f1_score,pos_label=0)
     
     grid_search = GridSearchCV(
         estimator=rf_base, 
         param_grid=param_grid, 
         cv=5, 
-        scoring='f1', 
+        scoring=f1_maligno, 
         n_jobs=-1 
     )
     
@@ -502,8 +504,14 @@ if __name__ == "__main__":
     
 
     # CAMINO 2: EVALUACIÓN ESTANDARIZADA ( KNN y Red Neuronal)
-    df_estandarizado = armardf_estandarizado()
-    x_train_std, x_test_std, y_train_std, y_test_std = split(df_estandarizado)
+    #df_estandarizado = armardf_estandarizado()
+    scaler = StandardScaler()
+    x_train_std = scaler.fit_transform(x_train_norm)
+    x_train_std = pd.DataFrame(x_train_std, columns=x_train_norm.columns)
+    x_test_std = scaler.transform(x_test_norm)
+    x_test_std = pd.DataFrame(x_test_std, columns=x_test_norm.columns)
+    y_train_std = copy.deepcopy(y_train_norm)
+    y_test_std = copy.deepcopy(y_test_norm)
     
     modelos_base_std = modelos() 
     modeloestandarizado_entrenados = entrenamiento(modelos_base_std, x_train_std, y_train_std)
@@ -515,7 +523,13 @@ if __name__ == "__main__":
     # PUNTOS (8, 9 y 10) 
     # PTO 8: Optimización
     mejor_bosque_tuneado = optimizar_random_forest(x_train_norm, y_train_norm)
+    print(f"\nParámetros del modelo BASE (sin optimizar): {modelonormal_entrenados['Random Forest'].get_params()}")
+    print(f"Parámetros del modelo OPTIMIZADO: {mejor_bosque_tuneado.get_params()}")
+
+    preds_base = modelonormal_entrenados["Random Forest"].predict(x_test_norm)
     predicciones_tuneadas = mejor_bosque_tuneado.predict(x_test_norm)
+    print(f"¿Predicciones idénticas?: {(preds_base == predicciones_tuneadas).all()}")
+    print(f"Cantidad de predicciones distintas: {(preds_base != predicciones_tuneadas).sum()} de {len(preds_base)}")
     
     # PTO 9: Variables importantes
     variables_importantes(mejor_bosque_tuneado, "Optimizado")
