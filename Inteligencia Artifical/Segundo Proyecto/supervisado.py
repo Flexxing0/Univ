@@ -67,17 +67,14 @@ def graficos_iniciales():
 def boxplots(df):
     print("\n=== GENERANDO BOXPLOTS AUTOMÁTICOS BASADOS EN TOP 10 DE CORRELACIÓN ===")
     
-    # 1. Creamos una copia para no alterar el DataFrame original y preparamos las etiquetas
     df_temp = copy.deepcopy(df)
     df_temp['Diagnóstico'] = df_temp['target'].map({0: 'Maligno (0)', 1: 'Benigno (1)'})
     
-    # 2. CALCULO MATEMÁTICO DE SELECCIÓN (Punto 3 y 4)
-    # Calculamos la correlación absoluta con el target y sacamos el Top 10 (excluyendo al 'target' mismo)
     matriz_corr = df_temp.drop(columns=['Diagnóstico']).corr()
     top_10_serie = matriz_corr['target'].abs().sort_values(ascending=False).iloc[1:11]
     top_10_atributos = top_10_serie.index.tolist()
     
-    # IMPRESIÓN ELEGANTE EN CONSOLA
+
     print("\n" + "="*60)
     print("   TOP 10 ATRIBUTOS CON MAYOR CORRELACIÓN A LAS CLASES")
     print("="*60)
@@ -86,11 +83,9 @@ def boxplots(df):
     print("="*60 + "\n")
     
     
-    # 3. SEPARACIÓN AUTOMÁTICA POR ESCALAS
-    # Clasificamos las variables dinámicamente mirando el valor máximo absoluto que alcanzan en los datos
-    atributos_micro = []  # Para los que se mueven entre 0 y 1 (como concave points)
-    atributos_media = []  # Para rangos intermedios (como los radios, de 5 a 50)
-    atributos_macro = []  # Para valores gigantes (como perímetros y áreas, > 50)
+    atributos_micro = []  
+    atributos_media = []  
+    atributos_macro = []  
     
     for col in top_10_atributos:
         val_max = df_temp[col].abs().max()
@@ -101,9 +96,8 @@ def boxplots(df):
         else:
             atributos_macro.append(col)
             
-    # 4. GENERACIÓN DE LOS GRÁFICOS DINÁMICOS
+
     
-    # --- Gráfico 1: Escala Micro (Decimales) ---
     if atributos_micro:
         fig, ax = plt.subplots(figsize=(10, 6))
         df_temp.boxplot(column=atributos_micro, by='Diagnóstico', ax=ax)
@@ -115,7 +109,6 @@ def boxplots(df):
         plt.close()
         print("-> 'boxplot_auto_micro.png' generado.")
 
-    # --- Gráfico 2: Escala Media (Radios / Texturas intermedias) ---
     if atributos_media:
         fig, ax = plt.subplots(figsize=(8, 5))
         df_temp.boxplot(column=atributos_media, by='Diagnóstico', ax=ax)
@@ -127,13 +120,11 @@ def boxplots(df):
         plt.close()
         print("-> 'boxplot_auto_media.png' generado.")
 
-    # --- Gráfico 3: Escala Macro (Áreas y Perímetros separados dinámicamente para no aplastarse) ---
     if atributos_macro:
-        # Si hay más de un atributo macro, usamos subplots para que cada uno mantenga su legibilidad
+
         num_macro = len(atributos_macro)
         fig, ejes = plt.subplots(1, num_macro, figsize=(6 * num_macro, 6))
-        
-        # Si es solo 1 atributo macro, 'ejes' no es una lista, lo convertimos para poder iterar tranquilamente
+    
         if num_macro == 1:
             ejes = [ejes]
             

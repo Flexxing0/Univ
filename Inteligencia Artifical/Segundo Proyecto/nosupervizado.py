@@ -69,7 +69,7 @@ def analizar_kmeans_metodo_codo_y_silhouette(X_scaled):
     
     print("PUNTOS 14, 15 Y 16")
     for k in valores_k:
-        kmeans = KMeans(n_clusters=k, n_init='auto', random_state=42)
+        kmeans = KMeans(n_clusters=k, n_init=10, random_state=42)
         kmeans.fit(X_scaled)
         
         inercias.append(kmeans.inertia_)
@@ -88,7 +88,7 @@ def analizar_kmeans_metodo_codo_y_silhouette(X_scaled):
 def visualizar_clusters_y_clases_reales(X_pca, X_scaled, y_real, pca_transformer, k_elegido):
     """Punto 17 y 18"""
     
-    kmeans_final = KMeans(n_clusters=k_elegido, n_init='auto', random_state=42)
+    kmeans_final = KMeans(n_clusters=k_elegido, n_init=10, random_state=42)
     kmeans_final.fit(X_scaled)
     labels_pred = kmeans_final.labels_
     
