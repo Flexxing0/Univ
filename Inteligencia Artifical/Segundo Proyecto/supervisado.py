@@ -64,7 +64,94 @@ def graficos_iniciales():
     plt.title("Distribución de clases")
     plt.savefig("distribucion_clases2.png")
     plt.close()
-    
+
+def estadisticos_descriptivos(df):
+    print("\n" + "="*70)
+    print("   ESTADÍSTICOS DESCRIPTIVOS DEL DATASET")
+    print("="*70)
+
+    desc = df.drop(columns=['target']).describe().T
+
+    modas = df.drop(columns=['target']).mode().iloc[0]
+    desc['moda'] = modas
+
+    desc = desc.rename(columns={
+        'mean': 'Media',
+        'std': 'Desvío Std',
+        'min': 'Mínimo',
+        '50%': 'Mediana',
+        'max': 'Máximo',
+        'moda': 'Moda'
+    })
+
+    tabla_final = desc[['Media', 'Moda', 'Mediana', 'Desvío Std', 'Mínimo', 'Máximo']]
+
+    print(tabla_final.round(3).to_string())
+    print("="*70 + "\n")
+    print("Nota: en variables continuas la moda suele ser poco representativa,")
+    print("ya que rara vez hay valores exactamente repetidos.\n")
+
+    tabla_final.to_csv('estadisticos_descriptivos.csv')
+    print("-> 'estadisticos_descriptivos.csv' generado.")
+
+    graficar_estadisticos(tabla_final)
+
+    return tabla_final
+
+
+def graficar_estadisticos(tabla):
+    import matplotlib.pyplot as plt
+
+    micro, media, macro = [], [], []
+    for var in tabla.index:
+        val_max = tabla.loc[var, 'Máximo']
+        if val_max <= 1.0:
+            micro.append(var)
+        elif val_max <= 50.0:
+            media.append(var)
+        else:
+            macro.append(var)
+
+    grupos = [
+        (micro, 'Escala Micro (0 a 1)', 'estadisticos_micro.png'),
+        (media, 'Escala Media (hasta 50)', 'estadisticos_media.png'),
+        (macro, 'Escala Macro (magnitudes grandes)', 'estadisticos_macro.png'),
+    ]
+
+    for variables, titulo_escala, nombre_archivo in grupos:
+        if not variables:
+            continue
+
+        subset = tabla.loc[variables]
+        fig, axes = plt.subplots(1, 2, figsize=(16, max(4, 0.5 * len(variables))))
+
+        # --- Gráfico 1: Media con barras de error (Desvío Std) ---
+        axes[0].barh(subset.index, subset['Media'], xerr=subset['Desvío Std'],
+                     color='#3498db', edgecolor='black', capsize=4, alpha=0.85)
+        axes[0].set_title(f'Media ± Desvío Estándar — {titulo_escala}', fontsize=11, fontweight='bold')
+        axes[0].set_xlabel('Valor')
+        axes[0].grid(axis='x', linestyle='--', alpha=0.4)
+
+        # --- Gráfico 2: tabla visual con Mínimo, Mediana, Máximo ---
+        axes[1].axis('off')
+        tabla_mostrar = subset[['Mínimo', 'Mediana', 'Máximo']].round(3)
+        tabla_render = axes[1].table(
+            cellText=tabla_mostrar.values,
+            rowLabels=tabla_mostrar.index,
+            colLabels=tabla_mostrar.columns,
+            cellLoc='center',
+            loc='center'
+        )
+        tabla_render.auto_set_font_size(False)
+        tabla_render.set_fontsize(9)
+        tabla_render.scale(1, 1.5)
+        axes[1].set_title('Mínimo / Mediana / Máximo', fontsize=11, fontweight='bold', pad=20)
+
+        plt.tight_layout()
+        plt.savefig(nombre_archivo, dpi=200, bbox_inches='tight')
+        plt.close()
+        print(f"-> '{nombre_archivo}' generado.")
+        
 def boxplots(df):
     print("\n=== GENERANDO BOXPLOTS AUTOMÁTICOS BASADOS EN TOP 10 DE CORRELACIÓN ===")
     
@@ -483,6 +570,7 @@ if __name__ == "__main__":
     # CAMINO 1: EVALUACIÓN NORMAL
 
     df_normal = armar_df()
+    estadisticos_descriptivos(df_normal)
     boxplots(df_normal) #
     x_train_norm, x_test_norm, y_train_norm, y_test_norm = split(df_normal)
     
