@@ -172,7 +172,7 @@ def split(df):
     columnas = df.columns.values.tolist()
     prediccion = columnas[:30]
     objetivo = columnas[30]
-    x_train,x_test,y_train,y_test= train_test_split(df[prediccion],df[objetivo],test_size=0.30,stratify=df[objetivo],random_state=42)
+    x_train,x_test,y_train,y_test= train_test_split(df[prediccion],df[objetivo],test_size=0.30,stratify=df[objetivo],random_state=56)
     return x_train,x_test,y_train,y_test
 
 def modelos():
