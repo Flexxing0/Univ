@@ -140,16 +140,6 @@ def boxplots(df):
         plt.close()
         print("-> 'boxplot_auto_macro.png' generado.")
 
-def armardf_estandarizado():
-    print("estandarizado")
-    scaler = StandardScaler() 
-    x_esc = scaler.fit_transform(copy.deepcopy(x))
-    df_estandarizado = pd.DataFrame(x_esc, columns=x.columns)
-    df_estandarizado['target'] = copy.deepcopy(y)
-    print(df_estandarizado.isnull().sum().sum())  
-    print(df_estandarizado)
-    return df_estandarizado
-
 def armar_df():
     print("normal")
     df = copy.deepcopy(x)
